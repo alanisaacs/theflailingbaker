@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="description" content="The Flailing Baker">
+    <meta name="keywords" content="sourdough whole-wheat bread">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>The Flailing Baker</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles_all.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles_tfb.css') }}">
+</head>
+
+<body>
+    <div id="body_wrap">
+        <header id="main_header">
+            <div id="main_title">
+               The Flailing Baker
+            </div>
+            <nav id="nav_bar">
+                <div class="nav_item">
+                    <a href="http://exultoshores.com">EOS</a>
+                </div>
+                <div class="nav_item">
+                    <a href="/">Home</a>
+                </div>
+                <div class="nav_item">
+                    <a href="/blog">Blog</a>
+                </div>
+                <div class="nav_item">
+                    <a href="/insights">Insights</a>
+                </div>
+                <div class="nav_item">
+                    <a href="/loaflog">Loaflog</a>
+                </div>
+                <div class="nav_item">
+                    <a href="/recipes">Recipes</a>
+                </div>
+        </header>
+
+        <section id="main_section">
+            {% block content %}
+            {% endblock %}
+        </section>
+
+        <footer id="main_footer">
+            <p>"I sound my barbaric yawp over the roofs of the world. &mdash;Whitman</p>
+            <p>Copyright&copy;2021 exultoshores.com</p>
+        </footer>
+    </div>
+
+</body>
+
+</html>

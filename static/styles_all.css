@@ -1,0 +1,141 @@
+/* ======= Generic Styles for All Apps ======= */
+
+table, th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+  padding: 10px;
+}
+
+/* ======= Page Layout ======= */
+
+#body_wrap {
+  text-align: center;
+}
+
+#main_header {
+  display: block;
+}
+
+#main_section {
+  font-family: Garamond, serif;
+  text-align: left;
+}
+
+#main_footer {
+  clear: both;
+  color: #504e4e;
+  font-size: smaller;
+  padding: 20px;
+}
+
+/* ======= Title and nav bar ======= */
+
+#main_title {
+  /* Color in site-specific styles */
+  font-size: 2em;
+  font-weight: bold;
+  margin: 5px 0px;
+  text-align: center;
+}
+
+#nav_bar {
+
+}
+
+.nav_item {
+  display: inline-block;
+  padding: 5px;
+}
+
+.nav_item a {
+  /* Color in site-specific styles */
+  text-decoration: none;
+}
+
+.nav_item a:hover {
+  /* Color in site-specific styles */
+}
+
+.nav_item a:link {
+  /* none */
+}
+
+.nav_item a:visited {
+  /* none */
+}
+
+/* ======= Subheaders ======= */
+
+.bar_header {
+  background-color: #c0c0c0;
+  color: #0000cd;
+  font-family:Arial, Helvetica, sans-serif;
+  font-size: 1.2em;
+  font-weight:bold;
+  margin: 15px 0px;
+  padding: 3px 10px;
+}
+
+.subhead {
+  color: green;  
+  font-style: italic;
+  text-align: center;
+}
+
+/* ======= Form buttons ======= */
+.button {
+  background-color: black;
+  border-radius: 4px;
+  color: white;
+  cursor: pointer;
+  display: inline-block;
+  padding: 0px 6px;
+  text-align: center;
+  text-decoration: none;
+}
+
+.button_edit {
+  background-color: #ffffbb; 
+  color: purple; 
+}
+
+.button_edit:hover {
+  background-color: plum;
+}
+
+.button_edit:active {
+  background-color: purple;
+  color: plum;
+}
+
+.button_delete {
+  background-color: silver; 
+  color: #303030; 
+}
+
+.button_delete:hover {
+  background-color: #979297;
+}
+
+.button_delete:active {
+  background-color: #303030;
+  color: #979797;
+}
+
+
+/* ======= Flash Messages from Flask ======= */
+
+.flash_messages {
+  margin-top: 15px;
+  font-weight: bold;
+}
+
+.messageError {
+  padding: 15px;
+  background-color: #fa8072;
+}
+
+.messageSuccess {
+  padding: 15px;
+  background-color: #7fff00;
+}

@@ -1,0 +1,48 @@
+/* ======= Styles for The Flailing Baker ======= */
+/* ======= Extending styles_all.css ======= */
+
+/* ======= Site Color Scheme ======= */
+
+:root {
+    --body-background-color: #ffe4e1;
+    --main-title-color: #556b2f;
+    --nav-item-color: #00008b;
+    --nav-item-hover-color: #ff6347;
+}
+
+/* ======= Site Background Color ======= */
+
+body {
+    /* Extend background color to entire canvas */
+    /* background-color: #ffff70; */
+    background-color: var(--body-background-color);
+}
+
+/* ======= Page Layout ======= */
+
+/* ======= Title and nav bar ======= */
+
+#main_title {
+    color: var(--main-title-color);
+}
+
+.nav_item a {
+    color: var(--nav-item-color);
+  }
+
+.nav_item a:hover {
+    color: var(--nav-item-hover-color);
+}
+
+/* ======= Subheaders ======= */
+
+/* extends styles_all.css */
+.bar_header {   
+    color: var(--main-title-color);
+}
+
+/* ======= Home page image ======= */
+.loaf {
+    margin-top: 10px;
+    text-align: center; 
+}
