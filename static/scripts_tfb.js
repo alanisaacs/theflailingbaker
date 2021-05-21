@@ -15,6 +15,8 @@ function set_table(table, data, ...cols) {
 		th.appendChild(text);
 		row.appendChild(th);
 	}
+	// TODO FIX THIS so column index isn't hard coded
+	row.cells[3].setAttribute('hidden', true);
 	// Write each row of data into the table body
 	let tbody = table.createTBody();
 	for (d of data) {
@@ -24,6 +26,30 @@ function set_table(table, data, ...cols) {
 			cell.innerHTML = d[col];
 			// Add attribute to track column header
 			cell.setAttribute('col_head', col);
+			if (col === 'notes') {
+				cell.setAttribute('hidden', true);
+			}
+		}
+	}
+}
+
+function toggleShowAllNotes() {
+	// See if notes column in header is visible
+	// TODO un-hardcode the column index
+	let notesHeader = document.getElementById('tools').rows[0].cells[3]
+	let isHidden = notesHeader.getAttribute('hidden');
+	let tds = document.querySelectorAll('td');
+	if (isHidden) { 
+		// Unhide the notes column
+		notesHeader.removeAttribute('hidden');
+		for (td of tds) td.removeAttribute('hidden');
+	} else {
+		// Hide the notes column
+		notesHeader.setAttribute('hidden', true);
+		for (td of tds) {
+			if (td.getAttribute('col_head') === 'notes') {
+				td.setAttribute('hidden', true);
+			}
 		}
 	}
 }
