@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class=bar_header>Already a Member? Please Log In</div>
+
+<form action="" method="post">
+    <p>
+        <label for="username">Username:</label>
+        <input type="text" name="username" required>
+    </p>
+    <p>
+        <label for="password">Password:</label>
+        <input type="password" name="password" required>
+    </p>
+    <p>
+        <button type="submit">
+            Submit
+        </button>
+    </p>
+</form>
+
+<p>If you forgot your password, or want to create a new account, contact the site administrator.</p>
+
+{% endblock %}

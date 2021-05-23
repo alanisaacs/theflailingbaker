@@ -26,7 +26,7 @@
                 <div class="nav_item">
                     <a href="/">Home</a>
                 </div>
-                <div class="nav_item">
+                <!-- <div class="nav_item">
                     <a href="/blog">Blog</a>
                 </div>
                 <div class="nav_item">
@@ -34,13 +34,36 @@
                 </div>
                 <div class="nav_item">
                     <a href="/loaflog">Loaflog</a>
+                </div> -->
+                <div class="nav_item">
+                    <a href="/recipes">Recipe</a>
                 </div>
                 <div class="nav_item">
-                    <a href="/recipes">Recipes</a>
+                    <a href="/recipes/tools">Tools</a>
                 </div>
+                {% if current_user.is_authenticated %}
+                Welcome {{ current_user.username }}!
+                    <div class="nav_item">
+                        <a href="/logout">Log Out</a>
+                    </div>
+                    {% else %}
+                    <div class="nav_item">
+                        <a href="/login">Log In</a>
+                    </div>
+                {% endif %}
         </header>
 
         <section id="main_section">
+            <div class="flash_messages">
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <div class="{{ category }}">{{ message }}</div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+            </div>
+            
             {% block content %}
             {% endblock %}
         </section>

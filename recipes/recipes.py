@@ -2,7 +2,7 @@ from flask import (Blueprint,
                    jsonify,
                    render_template,
                    request)
-
+from flask_login import login_required
 from sqlalchemy import (asc,
                         desc)
 
@@ -35,6 +35,7 @@ def showTools():
 
 # Display tools page in editing mode
 @recipes_bp.route('/recipes/tools_edit')
+@login_required
 def editTools():
     """Display tools page in editing mode"""
     DBSession = open_db_session()
