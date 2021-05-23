@@ -1,6 +1,29 @@
 // JavaScript for The Flailing Baker
 
-// Generic Table Functions
+// ======= DISPLAY IN DIVS =======
+
+function display_tools(tools) {
+    // Input: Array of objects; each object is a row in the db
+    // With keys id, name, and description
+    const toolbox = document.getElementById('toolbox');
+    for (tool of tools) {
+        let tname = document.createElement('div');
+        tname.className = 'tool_name';
+        tname.innerHTML = `${tool.id}. ${tool.name}`;
+        toolbox.appendChild(tname);
+        let tdesc = document.createElement('div');
+        tdesc.className = 'tool_desc';
+        tdesc.innerHTML = convert_chars(tool.description);
+        tname.appendChild(tdesc);
+        let tnotes = document.createElement('div');
+        tnotes.className = 'tool_notes';
+        tnotes.innerHTML = convert_chars(tool.notes);
+        tnotes.setAttribute('hidden', true);
+        tname.appendChild(tnotes);
+    }
+}
+
+// ======= DISPLAY IN TABLE FOR EDITING =======
 
 // COPIED FROM SCRIPTS_ATL, DIVERGED
 function set_table(table, data, ...cols) {
@@ -15,8 +38,6 @@ function set_table(table, data, ...cols) {
 		th.appendChild(text);
 		row.appendChild(th);
 	}
-	// TODO FIX THIS so column index isn't hard coded
-	row.cells[3].setAttribute('hidden', true);
 	// Write each row of data into the table body
 	let tbody = table.createTBody();
 	for (d of data) {
@@ -26,32 +47,20 @@ function set_table(table, data, ...cols) {
 			cell.innerHTML = d[col];
 			// Add attribute to track column header
 			cell.setAttribute('col_head', col);
-			if (col === 'notes') {
-				cell.setAttribute('hidden', true);
-			}
 		}
 	}
 }
 
 function toggleShowAllNotes() {
-	// See if notes column in header is visible
-	// TODO un-hardcode the column index
-	let notesHeader = document.getElementById('tools').rows[0].cells[3]
-	let isHidden = notesHeader.getAttribute('hidden');
-	let tds = document.querySelectorAll('td');
-	if (isHidden) { 
-		// Unhide the notes column
-		notesHeader.removeAttribute('hidden');
-		for (td of tds) td.removeAttribute('hidden');
-	} else {
-		// Hide the notes column
-		notesHeader.setAttribute('hidden', true);
-		for (td of tds) {
-			if (td.getAttribute('col_head') === 'notes') {
-				td.setAttribute('hidden', true);
-			}
-		}
-	}
+    const notes = document.querySelectorAll('.tool_notes');
+    let isHidden = notes[0].getAttribute('hidden');
+    for (let n of notes) {
+        if (isHidden) {
+            n.removeAttribute('hidden');
+        } else {
+            n.setAttribute('hidden', true);
+        }
+    }
 }
 
 // Cell editing procedure based on The Codeholic

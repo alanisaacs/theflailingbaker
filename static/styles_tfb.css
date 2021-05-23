@@ -46,3 +46,73 @@ body {
     margin-top: 10px;
     text-align: center; 
 }
+
+/* ======= Design with Tables ======= */
+.table_header {
+    background-color: #00008b;
+    color:#ffe4e1;
+    padding: .5rem;
+}
+
+.table_intro {
+    padding: .5rem;
+}
+
+/* ======= Design with Divs ======= */
+.toolbox {
+    padding: 10px;
+}
+
+.tool_name {
+    font-weight: bold;
+    padding: 1rem;
+}
+
+.tool_desc {
+    font-weight: normal;
+    padding-top: .5rem;
+    padding-left: 2rem;
+}
+
+.tool_notes {
+    border: 1px solid black;
+    font-weight: normal;
+    margin: 1rem 3rem;
+    padding: 1rem;
+}
+
+/* ======= Editing Cells in Table ======= */
+
+td {
+    vertical-align: top;
+}
+
+.btn {
+    border: 1px solid transparent;
+    border-radius: .3rem;
+    cursor: pointer;
+    font-size: .8rem;
+    line-height: .5;
+    padding: .5rem .5rem;
+}
+.btn-save {
+    background-color: lime; 
+}
+.btn-save:hover {
+    background-color: limegreen; 
+}
+.btn-save:active {
+    background-color: green; 
+}
+.btn-cancel {
+    background-color: hotpink;
+}
+.btn-cancel:hover {
+    background-color: #f0278c;
+}
+.btn-cancel:active {
+    background-color: red;
+}
+.button-toolbar {
+    margin-top: 1rem;
+}

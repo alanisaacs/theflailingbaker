@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<script>
+
+function create_tools() {
+    // Translate db object into JavaScript for processing
+    let ts = [];
+    let t = {};
+    {% for tool in tools %}
+        t = {};
+        // Use tojson filter to keep tags as they are in db
+        t.id = {{ tool.id|tojson }};
+        t.name = {{ tool.name|tojson }};
+        t.description = {{ tool.description|tojson }};
+        t.notes = {{ tool.notes|tojson }};
+        ts.push(t);
+    {% endfor %}
+    return ts;
+}
+
+function init_display_tools() {
+    let tools_all = create_tools();
+    display_tools(tools_all);
+}
+
+</script>
+
+<div class=bar_header>Recipes</div>
+<div class=article>
+    <div class=table_header>Tools</div>
+    <div class=table_intro>
+        All of these have many possible substitutes&mdash;
+        I'm just listing out my current set.
+    </div>
+    <p><button onclick="toggleShowAllNotes()">Show/Hide All Notes</button>
+        <a href="/recipes/tools_edit">Edit Data</a></p>
+    <div id=toolbox class=toolbox></div>
+</div>
+<script>init_display_tools()</script>
+
+{% endblock %}

@@ -19,12 +19,28 @@ recipes_bp = Blueprint(
 @recipes_bp.route('/recipes')
 def showRecipes():
     """Display recipes page"""
+    #DBSession = open_db_session()
+    #tools = DBSession.query(Tools).order_by('id').all()
+    #DBSession.close()
+    return render_template('recipes.html')
+
+# Display tools page
+@recipes_bp.route('/recipes/tools')
+def showTools():
+    """Display tools page"""
     DBSession = open_db_session()
-    tools = DBSession.query(Tools).all()
-    # for t in tools:
-    #     print(f"======= ID LIST ======= {t.id}")
+    tools = DBSession.query(Tools).order_by('id').all()
     DBSession.close()
-    return render_template('recipes.html', tools=tools)
+    return render_template('tools.html', tools=tools)
+
+# Display tools page in editing mode
+@recipes_bp.route('/recipes/tools_edit')
+def editTools():
+    """Display tools page in editing mode"""
+    DBSession = open_db_session()
+    tools = DBSession.query(Tools).order_by('id').all()
+    DBSession.close()
+    return render_template('tools_edit.html', tools=tools)
 
 @recipes_bp.route('/update_cell', methods=['POST'])
 def update_cell():

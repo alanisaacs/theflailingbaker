@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<script>
+
+function create_tools() {
+    // Translate db object into JavaScript for processing
+    let ts = [];
+    let t = {};
+    {% for tool in tools %}
+        t = {};
+        // Use tojson filter to keep tags as they are in db
+        t.id = {{ tool.id|tojson }};
+        t.name = {{ tool.name|tojson }};
+        t.description = {{ tool.description|tojson }};
+        t.notes = {{ tool.notes|tojson }};
+        ts.push(t);
+    {% endfor %}
+    return ts;
+}
+
+function display_tools_as_table() {
+    let tools_all = create_tools();
+	let tbl = document.getElementById("tools");
+	set_table(tbl, tools_all, 'id', 'name', 'description', 'notes');
+    init_editing('tools');
+}
+
+</script>
+
+<div class=bar_header>Tools</div>
+<p><a href="/recipes/tools">Done Editing</a></p>
+<div class=article>
+    <div class=table_header>Tools</div>
+    <table id=tools></table>
+</div>
+<script>display_tools_as_table()</script>
+
+{% endblock %}
