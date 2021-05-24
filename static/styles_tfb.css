@@ -36,10 +36,10 @@ body {
 
 /* ======= Subheaders ======= */
 
-/* extends styles_all.css */
+/* extends styles_all.css
 .bar_header {   
     color: var(--main-title-color);
-}
+} */
 
 /* ======= Home page image ======= */
 .loaf {
@@ -63,22 +63,46 @@ body {
     padding: 10px;
 }
 
-.tool_name {
+.recipebox {
+    padding: 10px;
+}
+
+.item_name {
+    border-top: 1px solid black;
+    font-size: x-large;
     font-weight: bold;
     padding: 1rem;
 }
 
-.tool_desc {
+.item_desc {
+    font-size: medium;
     font-weight: normal;
     padding-top: .5rem;
+    padding-bottom: .5rem;
     padding-left: 2rem;
 }
 
-.tool_notes {
-    border: 1px solid black;
+.item_notes {
+    font-size: medium;
     font-weight: normal;
-    margin: 1rem 3rem;
     padding: 1rem;
+}
+
+.notesbox {
+    border: 1px solid darkred;
+    margin: 1rem 3rem;
+}
+
+.notesbar {
+    background-color: darkred;
+    color: white;
+    font-size: medium;
+    padding-left: 1rem;
+}
+
+.subbox {
+    font-size: large;
+    margin: 1rem 2rem;
 }
 
 /* ======= Editing Cells in Table ======= */

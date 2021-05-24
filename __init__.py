@@ -13,7 +13,7 @@ from insights.insights import insights_bp
 from loaflog.loaflog import loaflog_bp
 from models import (open_db_session,
                     User)
-from recipes.recipes import recipes_bp
+from recipe.recipe import recipe_bp
 
 # Create Flask app
 app = Flask(__name__)
@@ -24,7 +24,7 @@ app.register_blueprint(blog_bp)
 app.register_blueprint(home_bp)
 app.register_blueprint(insights_bp)
 app.register_blueprint(loaflog_bp)
-app.register_blueprint(recipes_bp)
+app.register_blueprint(recipe_bp)
 
 # Set Flask app configs from environment variables
 # TODO: Make sure to make new variables for this site

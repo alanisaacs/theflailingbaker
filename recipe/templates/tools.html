@@ -20,21 +20,25 @@ function create_tools() {
     return ts;
 }
 
-function display_tools_as_table() {
+function init_display_tools() {
     let tools_all = create_tools();
-	let tbl = document.getElementById("tools");
-	set_table(tbl, tools_all, 'id', 'name', 'description', 'notes');
-    init_editing('tools');
+    display_tools(tools_all);
 }
 
 </script>
 
 <div class=bar_header>Tools</div>
-<p><a href="/recipes/tools">Done Editing</a></p>
 <div class=article>
-    <div class=table_header>Tools</div>
-    <table id=tools></table>
+    <div class=table_intro>
+        All of these have many possible substitutes&mdash;
+        I'm just listing out my current set.
+    </div>
+    <p><button onclick="toggleShowAllNotes()">Show/Hide All Notes</button>
+        {% if current_user.is_authenticated %}
+            <a href="/recipe/tools_edit">Edit Data</a></p>
+        {% endif %}
+    <div id=toolbox class=toolbox></div>
 </div>
-<script>display_tools_as_table()</script>
+<script>init_display_tools()</script>
 
 {% endblock %}

@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<script>
+
+function create_procedure() {
+    // Translate db object into JavaScript for processing
+    let steps = [];
+    let s = {};
+    {% for step in procedure %}
+        s = {};
+        // Use tojson filter to keep tags as they are in db
+        s.step_id = {{ step.step_id|tojson }};
+        s.step = {{ step.step|tojson }};
+        s.name = {{ step.name|tojson }};
+        s.description = {{ step.description|tojson }};
+        s.notes = {{ step.notes|tojson }};
+        steps.push(s);
+    {% endfor %}
+    return steps;
+}
+
+function create_substeps() {
+    // Translate db object into JavaScript for processing
+    let substeps = [];
+    let s = {};
+    {% for substep in substeps %}
+        s = {};
+        // Use tojson filter to keep tags as they are in db
+        s.substep_id = {{ substep.substep_id|tojson }};
+        s.step_id = {{ substep.step_id|tojson }};
+        s.substep = {{ substep.substep|tojson }};
+        s.description = {{ substep.description|tojson }};
+        substeps.push(s);
+    {% endfor %}
+    return substeps;
+}
+
+function create_variables() {
+    // Translate db object into JavaScript for processing
+    let all_vars = [];
+    let this_var = {};
+    {% for v in variables %}
+        this_var = {};
+        // Use tojson filter to keep tags as they are in db
+        this_var.variable_id = {{ v.variable_id|tojson }};
+        this_var.step_id = {{ v.step_id|tojson }};
+        this_var.name = {{ v.name|tojson }};
+        this_var.description = {{ v.description|tojson }};
+        this_var.notes = {{ v.notes|tojson }};
+        all_vars.push(this_var);
+    {% endfor %}
+    return all_vars;
+}
+
+function init_display_recipe() {
+    let steps_all = create_procedure();
+    let substeps_all = create_substeps();
+    let variables_all = create_variables();
+    display_recipe(steps_all, substeps_all, variables_all);
+}
+
+</script>
+
+<div class=bar_header>Recipe</div>
+<div class=article>
+    <p><button onclick="toggleShowAllNotes()">Show/Hide All Notes</button>
+        {% if current_user.is_authenticated %}
+            <a href="/recipe/recipe_edit">Edit Data</a></p>
+        {% endif %}
+    <div id='recipebox'></div>
+</div>
+
+<script>init_display_recipe()</script>
+
+{% endblock %}

@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<script>
+
+function create_procedure() {
+    // Translate db object into JavaScript for processing
+    let steps = [];
+    let s = {};
+    {% for step in procedure %}
+        s = {};
+        // Use tojson filter to keep tags as they are in db
+        s.step_id = {{ step.step_id|tojson }};
+        s.step = {{ step.step|tojson }};
+        s.name = {{ step.name|tojson }};
+        s.description = {{ step.description|tojson }};
+        s.notes = {{ step.notes|tojson }};
+        steps.push(s);
+    {% endfor %}
+    return steps;
+}
+
+function create_substeps() {
+    // Translate db object into JavaScript for processing
+    let substeps = [];
+    let s = {};
+    {% for substep in substeps %}
+        s = {};
+        // Use tojson filter to keep tags as they are in db
+        s.substep_id = {{ substep.substep_id|tojson }};
+        s.step_id = {{ substep.step_id|tojson }};
+        s.substep = {{ substep.substep|tojson }};
+        s.description = {{ substep.description|tojson }};
+        substeps.push(s);
+    {% endfor %}
+    return substeps;
+}
+
+function create_variables() {
+    // Translate db object into JavaScript for processing
+    let all_vars = [];
+    let this_var = {};
+    {% for v in variables %}
+        this_var = {};
+        // Use tojson filter to keep tags as they are in db
+        this_var.variable_id = {{ v.variable_id|tojson }};
+        this_var.step_id = {{ v.step_id|tojson }};
+        this_var.name = {{ v.name|tojson }};
+        this_var.description = {{ v.description|tojson }};
+        this_var.notes = {{ v.notes|tojson }};
+        all_vars.push(this_var);
+    {% endfor %}
+    return all_vars;
+}
+
+function display_all_tables() {
+    let steps_all = create_procedure();
+	let tbl = document.getElementById("procedure");
+	set_table(tbl, steps_all, 'step_id', 'step', 'name', 
+        'description', 'notes');
+    init_editing('procedure');
+    let substeps_all = create_substeps();
+	tbl = document.getElementById("substeps");
+	set_table(tbl, substeps_all, 'substep_id', 'step_id', 
+        'substep', 'description');
+    init_editing('substeps');
+    let vars_all = create_variables();
+	tbl = document.getElementById("variables");
+	set_table(tbl, vars_all, 'variable_id', 'step_id', 'name', 
+        'description', 'notes');
+    init_editing('variables');
+}
+
+</script>
+
+<div class=bar_header>Edit Recipe</div>
+<div class=article>
+    <button><a href="/recipe">Done Editing</a></button>
+    <div class=table_header>EDIT PROCEDURE TABLE</div>
+    <table id=procedure></table>
+    <button><a href="/recipe">Done Editing</a></button>
+    <div class=table_header>EDIT SUBSTEPS TABLE</div>
+    <table id=substeps></table>
+    <button><a href="/recipe">Done Editing</a></button>
+    <div class=table_header>EDIT VARIABLES TABLE</div>
+    <table id=variables></table>
+    <button><a href="/recipe">Done Editing</a></button>
+</div>
+
+<script>display_all_tables()</script>
+
+{% endblock %}

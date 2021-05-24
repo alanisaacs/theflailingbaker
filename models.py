@@ -5,9 +5,14 @@
 import os
 
 from flask_login import UserMixin
-from sqlalchemy import create_engine, Column, Integer, String, Text
+from sqlalchemy import (create_engine, 
+                        Column, 
+                        ForeignKey,
+                        Integer, 
+                        String, 
+                        Text)
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import relationship, sessionmaker
 import urllib.parse
 
 # Define class to map to db table
@@ -16,11 +21,21 @@ Base = declarative_base()
 # Define procedure table as class
 class Procedure(Base):
     __tablename__ = 'procedure'
-    id = Column(Integer, primary_key=True)
+    step_id = Column(Integer, primary_key=True)
+    step = Column(Integer)
     name = Column(Text)
     description = Column(Text)
     notes = Column(Text)
 
+# Define substeps table as class
+class Substeps(Base):
+    __tablename__ = 'substeps'
+    substep_id = Column(Integer, primary_key=True)
+    substep = Column(Integer)
+    description = Column(Text)
+    step_id = Column(Integer, ForeignKey('procedure.step_id'))
+    procedure = relationship(Procedure)
+    
 # Define tools table as class
 class Tools(Base):
     __tablename__ = 'tools'
@@ -29,6 +44,17 @@ class Tools(Base):
     description = Column(Text)
     notes = Column(Text)
 
+# Define variables table as class
+class Variables(Base):
+    __tablename__ = 'variables'
+    variable_id = Column(Integer, primary_key=True)
+    name = Column(Integer)
+    description = Column(Text)
+    notes = Column(Text)
+    step_id = Column(Integer, ForeignKey('procedure.step_id'))
+    procedure = relationship(Procedure)
+
+# Define users table as class
 class User(UserMixin, Base):
     """Registered user information"""
     __tablename__ = 'users'
@@ -47,5 +73,9 @@ engine = create_engine('postgresql://whitman:' + pw_encoded + \
 # Create a session (not a connection, more a "workspace" for objects)
 open_db_session = sessionmaker(bind=engine)
 # To be made available throughout the app using syntax:
-# from models import open_db_session
-# DBSession = open_db_session()
+#     from models import open_db_session
+#     DBSession = open_db_session()
+# Create a dictionary with the class names as values
+# to be retrieved with keys corresponding to html table ids
+model_classes = {'procedure':Procedure, 'substeps':Substeps, 
+    'tools': Tools, 'variables':Variables}

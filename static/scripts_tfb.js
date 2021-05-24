@@ -2,24 +2,73 @@
 
 // ======= DISPLAY IN DIVS =======
 
+function display_recipe(steps, substeps, variables) {
+    // Inputs: Each parameter is an array of objects
+    // each object is a row in the db with columns as keys
+    const recipebox = document.getElementById('recipebox');
+    for (step of steps) {
+        let stepbox = document.createElement('div');
+        stepbox.className = 'item_name';
+        stepbox.innerHTML = `Step ${step.step}. ${step.name}`;
+        recipebox.appendChild(stepbox);
+        let stepdesc = document.createElement('div');
+        stepdesc.className = 'item_desc';
+        stepdesc.innerHTML = convert_chars(step.description);
+        stepbox.appendChild(stepdesc);
+        // Insert substeps for that step
+        for (substep of substeps) {
+            if (substep.step_id === step.step_id) {
+                let subbox = document.createElement('div');
+                subbox.className = 'subbox';
+                subbox.innerHTML = 
+                    `${step.step}.` +
+                    `${substep.substep} - ` +
+                    `${substep.description}`;
+                stepbox.appendChild(subbox);
+            }
+        }
+        // Insert notes (hidden by default)
+        let notesbox = document.createElement('div');
+        notesbox.className = 'notesbox';
+        stepbox.appendChild(notesbox);
+        let notesbar = document.createElement('div');
+        notesbar.className = 'notesbar';
+        notesbar.innerHTML = 'notes'
+        notesbox.appendChild(notesbar);
+        let stepnotes = document.createElement('div');
+        stepnotes.className = 'item_notes';
+        stepnotes.innerHTML = convert_chars(step.notes);
+        notesbox.setAttribute('hidden', true);
+        notesbox.appendChild(stepnotes);
+    }
+}
+
 function display_tools(tools) {
     // Input: Array of objects; each object is a row in the db
     // With keys id, name, and description
     const toolbox = document.getElementById('toolbox');
     for (tool of tools) {
         let tname = document.createElement('div');
-        tname.className = 'tool_name';
+        tname.className = 'item_name';
         tname.innerHTML = `${tool.id}. ${tool.name}`;
         toolbox.appendChild(tname);
         let tdesc = document.createElement('div');
-        tdesc.className = 'tool_desc';
+        tdesc.className = 'item_desc';
         tdesc.innerHTML = convert_chars(tool.description);
         tname.appendChild(tdesc);
+        // Insert notes (hidden by default)
+        let notesbox = document.createElement('div');
+        notesbox.className = 'notesbox';
+        tname.appendChild(notesbox);
+        let notesbar = document.createElement('div');
+        notesbar.className = 'notesbar';
+        notesbar.innerHTML = 'notes'
+        notesbox.appendChild(notesbar);
         let tnotes = document.createElement('div');
-        tnotes.className = 'tool_notes';
+        tnotes.className = 'item_notes';
         tnotes.innerHTML = convert_chars(tool.notes);
-        tnotes.setAttribute('hidden', true);
-        tname.appendChild(tnotes);
+        notesbox.setAttribute('hidden', true);
+        notesbox.appendChild(tnotes);
     }
 }
 
@@ -52,7 +101,7 @@ function set_table(table, data, ...cols) {
 }
 
 function toggleShowAllNotes() {
-    const notes = document.querySelectorAll('.tool_notes');
+    const notes = document.querySelectorAll('.notesbox');
     let isHidden = notes[0].getAttribute('hidden');
     for (let n of notes) {
         if (isHidden) {
@@ -66,11 +115,11 @@ function toggleShowAllNotes() {
 // Cell editing procedure based on The Codeholic
 // https://www.youtube.com/watch?v=K6IH25Vf8ZA
 
-function init_editing(tbl) {
+function init_editing(tableid) {
     // Create class instance to handle editing cells and initialize
-    const edit_tools = new TableCellEditing(
-		document.getElementById(tbl));
-    edit_tools.init();
+    const edit_table = new TableCellEditing(
+		document.getElementById(tableid));
+    edit_table.init();
 } 
 
 class TableCellEditing {
@@ -78,6 +127,7 @@ class TableCellEditing {
     // which has already been propagated
     constructor(table) {
         this.tbody = table.querySelector('tbody');
+        this.tableid = table.id;
     }
 
     init() {
@@ -129,7 +179,8 @@ class TableCellEditing {
         // Get column header (key) from td attribute
         let col_head = td.getAttribute('col_head');
         // Format POST as json to keep formatting
-        let postjson = {'id': record_id};
+        let postjson = {'tableid': this.tableid};
+        postjson['record_id'] = record_id;
         postjson[col_head] = tagged_text;
         // ISSUE: when col_head is 'id' it overwrites--albeit
         // with the same data--the record_id 'id'
