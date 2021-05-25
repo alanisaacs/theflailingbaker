@@ -77,5 +77,5 @@ open_db_session = sessionmaker(bind=engine)
 #     DBSession = open_db_session()
 # Create a dictionary with the class names as values
 # to be retrieved with keys corresponding to html table ids
-model_classes = {'procedure':Procedure, 'substeps':Substeps, 
-    'tools': Tools, 'variables':Variables}
+model_classes = {'procedure' : Procedure, 'substeps' : Substeps, 
+    'tools' : Tools, 'variables' : Variables}

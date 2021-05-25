@@ -140,3 +140,8 @@ td {
 .button-toolbar {
     margin-top: 1rem;
 }
+.add-row-button {
+    background-color: black;
+    color: lightgoldenrodyellow;
+    cursor: pointer;
+}

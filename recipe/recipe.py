@@ -3,8 +3,7 @@ from flask import (Blueprint,
                    render_template,
                    request)
 from flask_login import login_required
-from sqlalchemy import (asc,
-                        desc)
+from sqlalchemy import func
 
 from models import (open_db_session,
                     model_classes,
@@ -90,3 +89,33 @@ def update_cell():
     DBSession.commit()
     DBSession.close()
     return {'status':'ok'}
+
+@recipe_bp.route('/addrow', methods=['POST'])
+def addrow():
+    """Add a row to the table specified in request"""
+    # Data is in form {tableid: <string>}
+    tableid = request.json.get('tableid')
+    # Values are all blank
+    newrow = model_classes[tableid]()
+    DBSession = open_db_session()
+    DBSession.add(newrow)
+    # Get max value of primary key in table
+    # TODO Streamline this hacky code
+    # Problem is not new: 
+    # Class.<variable> doesn't work
+    # getattr(Class, <variable>) neither ...
+    if tableid == 'procedure':
+        newid = DBSession.query(
+            func.max(model_classes[tableid].step_id)).scalar()
+    elif tableid == 'substeps':
+       newid = DBSession.query(
+            func.max(model_classes[tableid].substep_id)).scalar()
+    elif tableid == 'tools':
+       newid = DBSession.query(
+            func.max(model_classes[tableid].id)).scalar()
+    elif tableid == 'variables':
+       newid = DBSession.query(
+            func.max(model_classes[tableid].variable_id)).scalar()
+    DBSession.commit()
+    DBSession.close()
+    return {'status': 'ok', 'newid': newid}

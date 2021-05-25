@@ -31,15 +31,15 @@ function display_recipe(steps, substeps, variables) {
         let notesbox = document.createElement('div');
         notesbox.className = 'notesbox';
         stepbox.appendChild(notesbox);
-        let notesbar = document.createElement('div');
-        notesbar.className = 'notesbar';
-        notesbar.innerHTML = 'notes'
-        notesbox.appendChild(notesbar);
-        let stepnotes = document.createElement('div');
-        stepnotes.className = 'item_notes';
-        stepnotes.innerHTML = convert_chars(step.notes);
-        notesbox.setAttribute('hidden', true);
-        notesbox.appendChild(stepnotes);
+            let notesbar = document.createElement('div');
+            notesbar.className = 'notesbar';
+            notesbar.innerHTML = 'notes'
+            notesbox.appendChild(notesbar);
+            let stepnotes = document.createElement('div');
+            stepnotes.className = 'item_notes';
+            stepnotes.innerHTML = convert_chars(step.notes);
+            notesbox.setAttribute('hidden', true);
+            notesbox.appendChild(stepnotes);
     }
 }
 
@@ -49,24 +49,24 @@ function display_tools(tools) {
     const toolbox = document.getElementById('toolbox');
     for (tool of tools) {
         let tname = document.createElement('div');
-        tname.className = 'item_name';
-        tname.innerHTML = `${tool.id}. ${tool.name}`;
-        toolbox.appendChild(tname);
-        let tdesc = document.createElement('div');
-        tdesc.className = 'item_desc';
-        tdesc.innerHTML = convert_chars(tool.description);
-        tname.appendChild(tdesc);
-        // Insert notes (hidden by default)
-        let notesbox = document.createElement('div');
-        notesbox.className = 'notesbox';
-        tname.appendChild(notesbox);
+            tname.className = 'item_name';
+            tname.innerHTML = `${tool.id}. ${tool.name}`;
+            toolbox.appendChild(tname);
+                let tdesc = document.createElement('div');
+                tdesc.className = 'item_desc';
+                tdesc.innerHTML = convert_chars(tool.description);
+                tname.appendChild(tdesc);
+                // Insert notes (hidden by default)
+                let notesbox = document.createElement('div');
+                notesbox.className = 'notesbox';
+                tname.appendChild(notesbox);
         let notesbar = document.createElement('div');
-        notesbar.className = 'notesbar';
-        notesbar.innerHTML = 'notes'
-        notesbox.appendChild(notesbar);
+            notesbar.className = 'notesbar';
+            notesbar.innerHTML = 'notes'
+            notesbox.appendChild(notesbar);
         let tnotes = document.createElement('div');
-        tnotes.className = 'item_notes';
-        tnotes.innerHTML = convert_chars(tool.notes);
+            tnotes.className = 'item_notes';
+            tnotes.innerHTML = convert_chars(tool.notes);
         notesbox.setAttribute('hidden', true);
         notesbox.appendChild(tnotes);
     }
@@ -98,6 +98,55 @@ function set_table(table, data, ...cols) {
 			cell.setAttribute('col_head', col);
 		}
 	}
+    // Add a button for inserting a new row
+    let addRowBtn = document.createElement('button');
+    addRowBtn.className = 'add-row-button';
+    addRowBtn.innerHTML = 'ADD ROW';
+    addRowBtn.addEventListener('click', (ev) => addRow(table));
+    table.appendChild(addRowBtn);
+}
+
+function addRow(tbl){
+    // Add a row to the end of the table
+    let postjson = {'tableid': tbl.id};
+    // Post table id to server
+    fetch('/addrow', {
+        method: 'POST',
+        headers: new Headers({"Content-Type": "application/json"}),
+        body: JSON.stringify(postjson)
+    })
+    .then(response => {
+        // First response is headers
+        return response.json();
+    }
+    )
+    .then(message => {
+        // Next response is returned by server function
+        if (message.status === 'ok') {
+            // Update table in browser
+            // ISSUE: NEW CELLS DON'T GET EDITING CODE
+            // Solved by initializing new TableCellEditing class
+            // Works -- but means creating new instance
+            // every time you add a single row, yuck!
+            // BETTER?: INCORPORATE INTO EDITING CLASS
+            // ALSO TOOLS TABLE ISN'T WORKING
+            numOfCols = tbl.rows[0].cells.length;
+            newrow = tbl.insertRow(-1);
+            for (let i=0; i<numOfCols; i++) {
+                newrow.insertCell(-1)
+            }
+            newrow.cells[0].innerHTML = message.newid;
+            // HERE A NEW CLASS IS INSTANTIATED
+            init_editing(tbl.id)
+        } else {
+            alert("Sorry, an error may have occured")
+        }
+    })
+    .catch(err => {
+        // This will catch 404s etc.
+        let err_message = err;
+        alert(`Error: ${err}`);
+    });
 }
 
 function toggleShowAllNotes() {
@@ -123,8 +172,7 @@ function init_editing(tableid) {
 } 
 
 class TableCellEditing {
-    // Constructor for class; assumes one table on the page
-    // which has already been propagated
+    // Constructor for class; parameter is table element
     constructor(table) {
         this.tbody = table.querySelector('tbody');
         this.tableid = table.id;
@@ -158,6 +206,7 @@ class TableCellEditing {
         td.setAttribute('block-orig', td.innerHTML);
         // Process for editing
         td.innerHTML = markup_for_editing(td.innerHTML);
+        if (td.innerHTML === "") td.innerHTML = 'text';
         // Show the Save and Cancel buttons
         this.createButtonToolbar(td);
     }
@@ -214,7 +263,6 @@ class TableCellEditing {
             let err_message = err;
             alert(`Error: ${err}`);
         });
-        // Display properly
     }
 
     inEditing(td){
