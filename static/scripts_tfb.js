@@ -74,7 +74,7 @@ function display_tools(tools) {
 
 // ======= DISPLAY IN TABLE FOR EDITING =======
 
-// COPIED FROM SCRIPTS_ATL, DIVERGED
+// COPIED FROM SCRIPTS_ATL, MUCH DIVERGED
 function set_table(table, data, ...cols) {
     // Generate a table element
 	// Parameters: table reference, array_of_objects, column names
@@ -98,55 +98,9 @@ function set_table(table, data, ...cols) {
 			cell.setAttribute('col_head', col);
 		}
 	}
-    // Add a button for inserting a new row
-    let addRowBtn = document.createElement('button');
-    addRowBtn.className = 'add-row-button';
-    addRowBtn.innerHTML = 'ADD ROW';
-    addRowBtn.addEventListener('click', (ev) => addRow(table));
-    table.appendChild(addRowBtn);
-}
-
-function addRow(tbl){
-    // Add a row to the end of the table
-    let postjson = {'tableid': tbl.id};
-    // Post table id to server
-    fetch('/addrow', {
-        method: 'POST',
-        headers: new Headers({"Content-Type": "application/json"}),
-        body: JSON.stringify(postjson)
-    })
-    .then(response => {
-        // First response is headers
-        return response.json();
-    }
-    )
-    .then(message => {
-        // Next response is returned by server function
-        if (message.status === 'ok') {
-            // Update table in browser
-            // ISSUE: NEW CELLS DON'T GET EDITING CODE
-            // Solved by initializing new TableCellEditing class
-            // Works -- but means creating new instance
-            // every time you add a single row, yuck!
-            // BETTER?: INCORPORATE INTO EDITING CLASS
-            // ALSO TOOLS TABLE ISN'T WORKING
-            numOfCols = tbl.rows[0].cells.length;
-            newrow = tbl.insertRow(-1);
-            for (let i=0; i<numOfCols; i++) {
-                newrow.insertCell(-1)
-            }
-            newrow.cells[0].innerHTML = message.newid;
-            // HERE A NEW CLASS IS INSTANTIATED
-            init_editing(tbl.id)
-        } else {
-            alert("Sorry, an error may have occured")
-        }
-    })
-    .catch(err => {
-        // This will catch 404s etc.
-        let err_message = err;
-        alert(`Error: ${err}`);
-    });
+    // Create a footer for control buttons like Add Row
+    let tfoot = document.createElement('tfoot');
+    table.appendChild(tfoot);
 }
 
 function toggleShowAllNotes() {
@@ -175,6 +129,7 @@ class TableCellEditing {
     // Constructor for class; parameter is table element
     constructor(table) {
         this.tbody = table.querySelector('tbody');
+        this.tfoot = table.querySelector('tfoot');
         this.tableid = table.id;
     }
 
@@ -191,6 +146,60 @@ class TableCellEditing {
                     this.startEditing(td);
                 }
             });
+        });
+        // Add a button for inserting a new row
+        let addRowBtn = document.createElement('button');
+        addRowBtn.className = 'add-row-button';
+        addRowBtn.innerHTML = 'ADD ROW';
+        addRowBtn.addEventListener('click', (ev) => this.addRow());
+        this.tfoot.appendChild(addRowBtn);
+    }
+
+    addRow() {
+        // Add a row to the end of the table
+        let postjson = {'tableid': this.tableid};
+        // Post table id to server
+        fetch('/addrow', {
+            method: 'POST',
+            headers: new Headers({"Content-Type": "application/json"}),
+            body: JSON.stringify(postjson)
+        })
+        .then(response => {
+            // First response is headers
+            return response.json();
+        }
+        )
+        .then(message => {
+            // Next response is returned by server function
+            if (message.status === 'ok') {
+                // Create a new row at the bottom of the table
+                let numOfCols = this.tbody.rows[0].cells.length;
+                let newrow = this.tbody.insertRow(-1);
+                for (let i=0; i<numOfCols; i++) {
+                    newrow.insertCell(-1);
+                }
+                // Put the new row primary key id in leftmost cell
+                newrow.cells[0].innerHTML = message.newid;
+                // Make new cells editable
+                let tds = newrow.cells;
+                for (let td of tds) {
+                    td.setAttribute('contentEditable', true);
+                    td.addEventListener('click', (ev) => {
+                        // Check if cell is already being edited
+                        // If not, then start
+                        if (!this.inEditing(td)) {
+                            this.startEditing(td);
+                        }
+                    });
+                }
+             } else {
+                alert("Sorry, an error may have occured")
+            }
+        })
+        .catch(err => {
+            // This will catch 404s etc.
+            let err_message = err;
+            alert(`Error: ${err}`);
         });
     }
     
@@ -303,7 +312,8 @@ class TableCellEditing {
 
     findEditing(){
         // Search all tds and return an array of those being edited
-        return Array.prototype.find.call(this.tds, td => this.inEditing(td));
+        return Array.prototype.find.call(
+            this.tds, td => this.inEditing(td));
     }
 }
 
