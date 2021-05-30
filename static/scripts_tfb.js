@@ -128,6 +128,7 @@ function init_editing(tableid) {
 class TableCellEditing {
     // Constructor for class; parameter is table element
     constructor(table) {
+        this.thead = table.querySelector('thead');
         this.tbody = table.querySelector('tbody');
         this.tfoot = table.querySelector('tfoot');
         this.tableid = table.id;
@@ -140,19 +141,32 @@ class TableCellEditing {
         this.tds.forEach(td => {
             td.setAttribute('contentEditable', true);
             td.addEventListener('click', (ev) => {
-                // Check if cell is already being edited
-                // If not, then start
-                if (!this.inEditing(td)) {
-                    this.startEditing(td);
-                }
+                this.prepForEditing(td);
             });
         });
-        // Add a button for inserting a new row
+        // Add a button for inserting a new row to the table footer
         let addRowBtn = document.createElement('button');
         addRowBtn.className = 'add-row-button';
         addRowBtn.innerHTML = 'ADD ROW';
         addRowBtn.addEventListener('click', (ev) => this.addRow());
         this.tfoot.appendChild(addRowBtn);
+    }
+
+    prepForEditing(td) {
+        // Check if the cell is already in editing mode
+        // if it is, do nothing
+        if (!this.inEditing(td)) {
+            // Warn if another cell hasn't been saved
+            const active_td = this.findEditing();
+            if (active_td) {
+                if (confirm('Save?')) {
+                    this.finishEditing(active_td);
+                } else {
+                    this.cancelEditing(active_td);
+                };
+            }
+            this.startEditing(td);
+        }
     }
 
     addRow() {
@@ -172,10 +186,15 @@ class TableCellEditing {
         .then(message => {
             // Next response is returned by server function
             if (message.status === 'ok') {
+                // Get array of column headers
+                let ths = this.thead.rows[0].children;
+                let col_heads = [];
+                for (let th of ths) {
+                    col_heads.push(th.innerText.toLowerCase());
+                }
                 // Create a new row at the bottom of the table
-                let numOfCols = this.tbody.rows[0].cells.length;
                 let newrow = this.tbody.insertRow(-1);
-                for (let i=0; i<numOfCols; i++) {
+                for (let i=0; i<col_heads.length; i++) {
                     newrow.insertCell(-1);
                 }
                 // Put the new row primary key id in leftmost cell
@@ -183,13 +202,13 @@ class TableCellEditing {
                 // Make new cells editable
                 let tds = newrow.cells;
                 for (let td of tds) {
+                    // Make editable (in this.init for other cells)
                     td.setAttribute('contentEditable', true);
+                    // Track the column header (in set_table)
+                    td.setAttribute('col_head', col_heads.shift());
+                    // Listen for clicks (also in this.init)
                     td.addEventListener('click', (ev) => {
-                        // Check if cell is already being edited
-                        // If not, then start
-                        if (!this.inEditing(td)) {
-                            this.startEditing(td);
-                        }
+                        this.prepForEditing(td);
                     });
                 }
              } else {
@@ -204,20 +223,36 @@ class TableCellEditing {
     }
     
     startEditing(td){
-        // Find any cells now being edited and cancel editing
-        const active_td = this.findEditing();
-        if (active_td) {
-            this.cancelEditing(active_td);
-        }
-        // Flag as in editing set in td class
+        // Record where user clicked (node and offset)
+        const sel = window.getSelection();
+        const _rng = sel.getRangeAt(0);
+        // Get offset from start of node
+        const nodeOffset = _rng.startOffset;
+        // Get offset from start of td element
+        // including all chars in innerHTML
+        let rng = _rng.cloneRange();
+        rng.selectNodeContents(td);
+        rng.setEnd(_rng.endContainer, _rng.endOffset)
+        const tdOffset = rng.toString().length;
+        // Get index of the node as a child of td
+        let nodeIndex = getNodeCount(td, tdOffset);
+        // Flag cell as being edited
         td.classList.add('in-editing');
-        // Original content stored in attribute
+        // Store original content in attribute
         td.setAttribute('block-orig', td.innerHTML);
-        // Process for editing
+        // Markup for editing
         td.innerHTML = markup_for_editing(td.innerHTML);
+        // Put something in a blank cell so it can be edited
+        // TODO: is there a better way to do this?
         if (td.innerHTML === "") td.innerHTML = 'text';
         // Show the Save and Cancel buttons
         this.createButtonToolbar(td);
+        // Set the cursor back to where the user clicked
+        // (adding the toolbar moves cursor to start of cell)
+        logNodes(td);
+        rng.setStart(td.childNodes[nodeIndex], nodeOffset);
+        sel.removeAllRanges();
+        sel.addRange(rng);  
     }
 
     cancelEditing(td){
@@ -335,4 +370,70 @@ function markup_for_editing(str) {
     // Now bring back <br>
     s = s.replace(/=br=/g, '<br>')
     return s;
+}
+
+/* Get and set cursor position functions
+   From islishude: https://gist.github.com/isLishude/
+   6ccd1fbf42d1eaac667d6873e7b134f8
+*/
+function getCursorPos(ele) {
+    // Selection finds selected text or in this case just the cursor
+    let sel = window.getSelection();
+    // Range is the start and end point of the selection
+    // A point = container element and offset chars from start
+    let rng = sel.getRangeAt(0);
+    console.log('GET startContainer: ', rng.startContainer)
+    console.log('GET startOffset: ', rng.startOffset)
+    return rng;
+}
+
+function setCursorPos(rng) {
+    console.log('SET startContainer: ', rng.startContainer)
+    console.log('SET startOffset: ', rng.startOffset)
+    let sel = window.getSelection();
+    sel.removeAllRanges();
+    sel.addRange(rng);
+}
+
+function logNodes(ele) {
+    let index = 0;
+    console.log('CHILDNODES: ', ele.childNodes.length)
+    ele.childNodes.forEach(node => {
+        console.log(`Node ${index} = ${node.nodeName}, ${node.nodeValue}`);
+        index++;
+    });
+}
+
+function getNodeCount(ele, index) {
+    // Page through element's contents as a string
+    // until index is reached, counting tags
+    // in order to return the node of the index
+    // Assumes all '<' start tags though, which they might not be
+    // TODO: don't count end tags
+    console.log('Index: ', index)
+    const s = ele.innerHTML.toString();
+    let charCount = 1;
+    let nodeCount = 0;
+    let suspendCounting = false;
+    for (char of s) {
+        console.log(`Checking char ${char} at count ${charCount}`)
+        if (char === '<') { 
+            suspendCounting = true;
+            nodeCount ++; 
+            console.log(`Found tag open, node count now ${nodeCount}`);
+        } else if (char === '>') {
+            suspendCounting = false;
+            nodeCount++;
+            console.log(`Found tag close, node count now ${nodeCount}`);
+        } else if (suspendCounting) {
+            // get next letter without counting
+            continue;
+        } else if (charCount >= index) {
+            break;
+        } else {
+            charCount++;
+        };
+    };
+    console.log('Returning nodeCount: ', nodeCount)
+    return nodeCount;
 }
