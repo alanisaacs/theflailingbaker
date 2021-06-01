@@ -229,13 +229,21 @@ class TableCellEditing {
         // Get offset from start of node
         const nodeOffset = _rng.startOffset;
         // Get offset from start of td element
-        // including all chars in innerHTML
+        // including all chars in innerHTML but not tags
         let rng = _rng.cloneRange();
         rng.selectNodeContents(td);
-        rng.setEnd(_rng.endContainer, _rng.endOffset)
+        rng.setEnd(_rng.endContainer, _rng.endOffset);
         const tdOffset = rng.toString().length;
         // Get index of the node as a child of td
-        let nodeIndex = getNodeCount(td, tdOffset);
+        console.log('NUM OF NODES AT START: ', td.childNodes.length);
+        logNodes(td);
+        let nodeIndex = 0;
+        if (td.childNodes.length > 1) {
+            // If there is only one node, no need to identify
+            // which one was clicked
+            nodeIndex = getNodeCount(td, tdOffset);
+        }
+        console.log('NODEINDEX: ', nodeIndex);
         // Flag cell as being edited
         td.classList.add('in-editing');
         // Store original content in attribute
@@ -250,7 +258,12 @@ class TableCellEditing {
         // Set the cursor back to where the user clicked
         // (adding the toolbar moves cursor to start of cell)
         logNodes(td);
-        rng.setStart(td.childNodes[nodeIndex], nodeOffset);
+        try {
+            rng.setStart(td.childNodes[nodeIndex], nodeOffset);
+        }
+        catch(err) {
+            rng.setStart(td.childNodes[0], tdOffset);
+        }
         sel.removeAllRanges();
         sel.addRange(rng);  
     }
@@ -395,23 +408,15 @@ function setCursorPos(rng) {
     sel.addRange(rng);
 }
 
-function logNodes(ele) {
-    let index = 0;
-    console.log('CHILDNODES: ', ele.childNodes.length)
-    ele.childNodes.forEach(node => {
-        console.log(`Node ${index} = ${node.nodeName}, ${node.nodeValue}`);
-        index++;
-    });
-}
-
 function getNodeCount(ele, index) {
     // Page through element's contents as a string
-    // until index is reached, counting tags
+    // until index (click point) is reached, counting tags
     // in order to return the node of the index
-    // Assumes all '<' start tags though, which they might not be
+    // Assumes all '<' are start tags though, which they might not be
+    // WORKS when tags are all <br>
     // TODO: don't count end tags
     console.log('Index: ', index)
-    const s = ele.innerHTML.toString();
+    const s = ele.innerHTML;
     let charCount = 1;
     let nodeCount = 0;
     let suspendCounting = false;
@@ -436,4 +441,16 @@ function getNodeCount(ele, index) {
     };
     console.log('Returning nodeCount: ', nodeCount)
     return nodeCount;
+}
+
+// For debugging
+function logNodes(ele) {
+    // Log child nodes of element to the console
+    let index = 0;
+    console.log(`=== LOG NODES (${ele.childNodes.length} total) ===`)
+    ele.childNodes.forEach(node => {
+        console.log(`Node ${index} = ${node.nodeName}, ${node.nodeValue}`);
+        index++;
+    });
+    console.log(`=== ===`);
 }
