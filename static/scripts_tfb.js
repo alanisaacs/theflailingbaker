@@ -223,46 +223,65 @@ class TableCellEditing {
     }
     
     startEditing(td){
-        // Record where user clicked (node and offset)
+        // Record where user clicked (node and offset within td)
         const sel = window.getSelection();
         const _rng = sel.getRangeAt(0);
         // Get offset from start of node
         const nodeOffset = _rng.startOffset;
         // Get offset from start of td element
-        // including all chars in innerHTML but not tags
+        // including all chars in innerHTML
+        // This counts <br> tags as characters
+        // TODO: but doesn't count other tags like <a>
+        // NOTE: only do this with <br> tags?
         let rng = _rng.cloneRange();
         rng.selectNodeContents(td);
         rng.setEnd(_rng.endContainer, _rng.endOffset);
         const tdOffset = rng.toString().length;
+        //console.log('NUM OF NODES AT START: ', td.childNodes.length);
+        //logNodes(td);
         // Get index of the node as a child of td
-        console.log('NUM OF NODES AT START: ', td.childNodes.length);
-        logNodes(td);
         let nodeIndex = 0;
         if (td.childNodes.length > 1) {
             // If there is only one node, no need to identify
             // which one was clicked
             nodeIndex = getNodeCount(td, tdOffset);
         }
-        console.log('NODEINDEX: ', nodeIndex);
+        //console.log(`nodeIndex: ${nodeIndex},
+        //    nodeOffset: ${nodeOffset}, tdOffset: ${tdOffset}`);
         // Flag cell as being edited
         td.classList.add('in-editing');
-        // Store original content in attribute
+        // Store original content in attribute in case of cancel/revert
         td.setAttribute('block-orig', td.innerHTML);
         // Markup for editing
         td.innerHTML = markup_for_editing(td.innerHTML);
-        // Put something in a blank cell so it can be edited
-        // TODO: is there a better way to do this?
-        if (td.innerHTML === "") td.innerHTML = 'text';
+        // Put a string in a blank cell to make a text node to be edited
+        if (td.innerHTML === "") {
+            td.innerHTML = 'TYPE';
+        }
         // Show the Save and Cancel buttons
+        // The buttons add a new div node to the cell
         this.createButtonToolbar(td);
         // Set the cursor back to where the user clicked
         // (adding the toolbar moves cursor to start of cell)
-        logNodes(td);
-        try {
-            rng.setStart(td.childNodes[nodeIndex], nodeOffset);
-        }
-        catch(err) {
-            rng.setStart(td.childNodes[0], tdOffset);
+        // For a new cell with just 'TYPE' in it, select the word
+        let zeronode = td.childNodes[0];
+        if (zeronode.nodeValue === 'TYPE') {
+            rng.setStart(zeronode, 0);
+            rng.setEnd(zeronode, 4);
+        } else {
+            // Otherwise, set the cursor to the former position
+            try {
+                rng.setStart(td.childNodes[nodeIndex], nodeOffset);
+            }
+            catch(err) {
+                // TEMP FIX: TODO: Keep cursor position in string
+                // Remove error when you start with >1 node 
+                // like with <a> tags, but adding the <div> node
+                // collapses the original nodes into a single node
+                // Cursor is positioned under where the user clicked
+                // even though the text beneath has changed
+                rng.setStart(zeronode, tdOffset);
+            }
         }
         sel.removeAllRanges();
         sel.addRange(rng);  
@@ -385,29 +404,6 @@ function markup_for_editing(str) {
     return s;
 }
 
-/* Get and set cursor position functions
-   From islishude: https://gist.github.com/isLishude/
-   6ccd1fbf42d1eaac667d6873e7b134f8
-*/
-function getCursorPos(ele) {
-    // Selection finds selected text or in this case just the cursor
-    let sel = window.getSelection();
-    // Range is the start and end point of the selection
-    // A point = container element and offset chars from start
-    let rng = sel.getRangeAt(0);
-    console.log('GET startContainer: ', rng.startContainer)
-    console.log('GET startOffset: ', rng.startOffset)
-    return rng;
-}
-
-function setCursorPos(rng) {
-    console.log('SET startContainer: ', rng.startContainer)
-    console.log('SET startOffset: ', rng.startOffset)
-    let sel = window.getSelection();
-    sel.removeAllRanges();
-    sel.addRange(rng);
-}
-
 function getNodeCount(ele, index) {
     // Page through element's contents as a string
     // until index (click point) is reached, counting tags
@@ -421,15 +417,15 @@ function getNodeCount(ele, index) {
     let nodeCount = 0;
     let suspendCounting = false;
     for (char of s) {
-        console.log(`Checking char ${char} at count ${charCount}`)
+        //console.log(`Checking char ${char} at count ${charCount}`)
         if (char === '<') { 
             suspendCounting = true;
             nodeCount ++; 
-            console.log(`Found tag open, node count now ${nodeCount}`);
+            //console.log(`Found tag open, node count now ${nodeCount}`);
         } else if (char === '>') {
             suspendCounting = false;
             nodeCount++;
-            console.log(`Found tag close, node count now ${nodeCount}`);
+            //console.log(`Found tag close, node count now ${nodeCount}`);
         } else if (suspendCounting) {
             // get next letter without counting
             continue;
@@ -439,7 +435,7 @@ function getNodeCount(ele, index) {
             charCount++;
         };
     };
-    console.log('Returning nodeCount: ', nodeCount)
+    //console.log('Returning nodeCount: ', nodeCount)
     return nodeCount;
 }
 
