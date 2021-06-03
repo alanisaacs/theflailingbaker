@@ -54,6 +54,16 @@ class Variables(Base):
     step_id = Column(Integer, ForeignKey('procedure.step_id'))
     procedure = relationship(Procedure)
 
+# Define metrics table as class
+class Metrics(Base):
+    __tablename__ = 'metrics'
+    metric_id = Column(Integer, primary_key=True)
+    name = Column(Integer)
+    description = Column(Text)
+    notes = Column(Text)
+    step_id = Column(Integer, ForeignKey('procedure.step_id'))
+    procedure = relationship(Procedure)
+
 # Define users table as class
 class User(UserMixin, Base):
     """Registered user information"""
@@ -78,4 +88,4 @@ open_db_session = sessionmaker(bind=engine)
 # Create a dictionary with the class names as values
 # to be retrieved with keys corresponding to html table ids
 model_classes = {'procedure' : Procedure, 'substeps' : Substeps, 
-    'tools' : Tools, 'variables' : Variables}
+    'tools' : Tools, 'variables' : Variables, 'metrics' : Metrics}

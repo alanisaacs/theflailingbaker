@@ -2,7 +2,7 @@
 
 // ======= DISPLAY IN DIVS =======
 
-function display_recipe(steps, substeps, variables) {
+function display_recipe(steps, substeps) {
     // Inputs: Each parameter is an array of objects
     // each object is a row in the db with columns as keys
     const recipebox = document.getElementById('recipebox');
@@ -13,7 +13,7 @@ function display_recipe(steps, substeps, variables) {
         recipebox.appendChild(stepbox);
         let stepdesc = document.createElement('div');
         stepdesc.className = 'item_desc';
-        stepdesc.innerHTML = convert_chars(step.description);
+        stepdesc.innerHTML = convertUserMarkup(step.description);
         stepbox.appendChild(stepdesc);
         // Insert substeps for that step
         for (substep of substeps) {
@@ -37,7 +37,7 @@ function display_recipe(steps, substeps, variables) {
             notesbox.appendChild(notesbar);
             let stepnotes = document.createElement('div');
             stepnotes.className = 'item_notes';
-            stepnotes.innerHTML = convert_chars(step.notes);
+            stepnotes.innerHTML = convertUserMarkup(step.notes);
             notesbox.setAttribute('hidden', true);
             notesbox.appendChild(stepnotes);
     }
@@ -54,7 +54,7 @@ function display_tools(tools) {
             toolbox.appendChild(tname);
                 let tdesc = document.createElement('div');
                 tdesc.className = 'item_desc';
-                tdesc.innerHTML = convert_chars(tool.description);
+                tdesc.innerHTML = convertUserMarkup(tool.description);
                 tname.appendChild(tdesc);
                 // Insert notes (hidden by default)
                 let notesbox = document.createElement('div');
@@ -66,7 +66,7 @@ function display_tools(tools) {
             notesbox.appendChild(notesbar);
         let tnotes = document.createElement('div');
             tnotes.className = 'item_notes';
-            tnotes.innerHTML = convert_chars(tool.notes);
+            tnotes.innerHTML = convertUserMarkup(tool.notes);
         notesbox.setAttribute('hidden', true);
         notesbox.appendChild(tnotes);
     }
@@ -237,7 +237,7 @@ class TableCellEditing {
         rng.selectNodeContents(td);
         rng.setEnd(_rng.endContainer, _rng.endOffset);
         const tdOffset = rng.toString().length;
-        //console.log('NUM OF NODES AT START: ', td.childNodes.length);
+        //console.log('=== NODES AT START: ', td.childNodes.length);
         //logNodes(td);
         // Get index of the node as a child of td
         let nodeIndex = 0;
@@ -246,8 +246,8 @@ class TableCellEditing {
             // which one was clicked
             nodeIndex = getNodeCount(td, tdOffset);
         }
-        //console.log(`nodeIndex: ${nodeIndex},
-        //    nodeOffset: ${nodeOffset}, tdOffset: ${tdOffset}`);
+        //console.log(`nodeIndex: ${nodeIndex}, ` +
+        //    `nodeOffset: ${nodeOffset}, tdOffset: ${tdOffset}`);
         // Flag cell as being edited
         td.classList.add('in-editing');
         // Store original content in attribute in case of cancel/revert
@@ -285,6 +285,8 @@ class TableCellEditing {
         }
         sel.removeAllRanges();
         sel.addRange(rng);  
+        //console.log('=== NODES AT END: ', td.childNodes.length);
+        //logNodes(td);
     }
 
     cancelEditing(td){
@@ -385,9 +387,9 @@ class TableCellEditing {
 }
 
 function markup_for_display(str) {
-    // Convert double hyphens to em dashes
-    let s = str.replace(/--/g, '&mdash;');
-    // Allow tags to work without showing
+    // Convert special markup entered by user
+    let s = convertUserMarkup(str);
+    // Make any html tags work invisibly (again)
     s = s.replace(/&lt;/g, '<');
     s = s.replace(/&gt;/g, '>');
     return s;
@@ -396,10 +398,10 @@ function markup_for_display(str) {
 function markup_for_editing(str) {
     // Keep <br> tags by temporarily replacing < and >
     let s = str.replace(/<br>/g, '=br=')
-    // Show tags
+    // Show other tags with <> characters for editing
     s = s.replace(/</g, '&lt;');
     s = s.replace(/>/g, '&gt;');
-    // Now bring back <br>
+    // Now bring back <br> so those you don't see
     s = s.replace(/=br=/g, '<br>')
     return s;
 }
@@ -411,7 +413,6 @@ function getNodeCount(ele, index) {
     // Assumes all '<' are start tags though, which they might not be
     // WORKS when tags are all <br>
     // TODO: don't count end tags
-    console.log('Index: ', index)
     const s = ele.innerHTML;
     let charCount = 1;
     let nodeCount = 0;

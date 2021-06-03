@@ -7,6 +7,7 @@ from sqlalchemy import func
 
 from models import (open_db_session,
                     model_classes,
+                    Metrics,
                     Procedure,
                     Substeps,
                     Tools,
@@ -26,12 +27,14 @@ def showRecipes():
     procedure = DBSession.query(Procedure).order_by('step_id').all()
     substeps = DBSession.query(Substeps).order_by('substep_id').all()
     variables = DBSession.query(Variables).order_by('variable_id').all()
+    metrics = DBSession.query(Metrics).order_by('metric_id').all()
     DBSession.close()
     return render_template(
         'recipe.html', 
         procedure = procedure,
         substeps = substeps,
-        variables = variables)
+        variables = variables,
+        metrics = metrics)
 
 # Display recipe page in editing mode
 @recipe_bp.route('/recipe/recipe_edit')
@@ -42,12 +45,14 @@ def editRecipe():
     procedure = DBSession.query(Procedure).order_by('step_id').all()
     substeps = DBSession.query(Substeps).order_by('substep_id').all()
     variables = DBSession.query(Variables).order_by('variable_id').all()
+    metrics = DBSession.query(Metrics).order_by('metric_id').all()
     DBSession.close()
     return render_template(
         'recipe_edit.html', 
         procedure = procedure,
         substeps = substeps,
-        variables = variables)
+        variables = variables,
+        metrics = metrics)
 
 # Display tools page
 @recipe_bp.route('/recipe/tools')

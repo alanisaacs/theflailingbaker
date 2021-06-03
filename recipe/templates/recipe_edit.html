@@ -54,6 +54,23 @@ function create_variables() {
     return all_vars;
 }
 
+function create_metrics() {
+    // Translate db object into JavaScript for processing
+    let all_metrics = [];
+    let m = {};
+    {% for metric in metrics %}
+        m = {};
+        // Use tojson filter to keep tags as they are in db
+        m.metric_id = {{ metric.metric_id|tojson }};
+        m.step_id = {{ metric.step_id|tojson }};
+        m.name = {{ metric.name|tojson }};
+        m.description = {{ metric.description|tojson }};
+        m.notes = {{ metric.notes|tojson }};
+        all_metrics.push(m);
+    {% endfor %}
+    return all_metrics;
+}
+
 function display_all_tables() {
     let steps_all = create_procedure();
 	let tbl = document.getElementById("procedure");
@@ -68,8 +85,13 @@ function display_all_tables() {
     let vars_all = create_variables();
 	tbl = document.getElementById("variables");
 	set_table(tbl, vars_all, 'variable_id', 'step_id', 'name', 
-        'description', 'notes');
+    'description', 'notes');
     init_editing('variables');
+    let metrics_all = create_metrics();
+	tbl = document.getElementById("metrics");
+	set_table(tbl, metrics_all, 'metric_id', 'step_id', 'name', 
+        'description', 'notes');
+    init_editing('metrics');
 }
 
 </script>
@@ -85,6 +107,9 @@ function display_all_tables() {
     <button><a href="/recipe">Done Editing</a></button>
     <div class=table_header>EDIT VARIABLES TABLE</div>
     <table id=variables></table>
+    <button><a href="/recipe">Done Editing</a></button>
+    <div class=table_header>EDIT METRICS TABLE</div>
+    <table id=metrics></table>
     <button><a href="/recipe">Done Editing</a></button>
 </div>
 
