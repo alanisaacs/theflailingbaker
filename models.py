@@ -73,12 +73,9 @@ class User(UserMixin, Base):
     password = Column(String(1024))
 
 # Create interface to db without connecting
-# TODO: Use env var for pw
-#pw = os.getenv('TFB_DB_USER_PW')
-#pw_encoded = urllib.parse.quote_plus(pw)
-pw = '7liminE##'
+pw = os.getenv('TFB_DB_USER_PW')
 pw_encoded = urllib.parse.quote_plus(pw)
-engine = create_engine('postgresql://whitman:' + pw_encoded + \
+engine = create_engine('postgresql://tfb_dbuser:' + pw_encoded + \
     '@localhost/tfb')
 # Create a session (not a connection, more a "workspace" for objects)
 open_db_session = sessionmaker(bind=engine)

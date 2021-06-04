@@ -79,8 +79,6 @@ def update_cell():
     # data is in form {tableid: <string>, record_id: <int>, 
     #     <col_head>:<newtext>}
     d = request.json
-    for k in d:
-        print(f"{k}: {d[k]}")
     tableid = d.pop('tableid')
     record_id = d.pop('record_id')
     if len(d) == 1:
@@ -92,10 +90,6 @@ def update_cell():
     # getting primary key (id)
     record_to_update = DBSession.query(
         model_classes[tableid]).get(record_id)
-    print(record_to_update)
-    print(record_id)
-    print(col_head)
-    print(newtext)
     setattr(record_to_update, col_head, newtext)
     DBSession.commit()
     DBSession.close()
