@@ -27,10 +27,19 @@ function display_tools_as_table() {
     init_editing('tools');
 }
 
+function clearClip() {
+    navigator.clipboard.writeText("").then(function() {
+        alert("clipboard cleared");
+    }, function() {
+        alert("clipboard write failed");
+    });
+}
+
 </script>
 
 <div class=bar_header>Tools</div>
 <button><a href="/recipe/tools">Done Editing</a></button>
+<button onclick=clearClip()>Clear Clipboard</button>
 <div class=article>
     <div class=table_header>Tools</div>
     <table id=tools></table>
