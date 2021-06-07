@@ -237,6 +237,8 @@ class TableCellEditing {
         rng.selectNodeContents(td);
         rng.setEnd(_rng.endContainer, _rng.endOffset);
         const tdOffset = rng.toString().length;
+        // If user has selected some chars, save the length
+        const lenOfSelection = _rng.endOffset - _rng.startOffset;
         //console.log('=== NODES AT START: ', td.childNodes.length);
         //logNodes(td);
         // Get index of the node as a child of td
@@ -268,10 +270,17 @@ class TableCellEditing {
         if (zeronode.nodeValue === 'TYPE') {
             rng.setStart(zeronode, 0);
             rng.setEnd(zeronode, 4);
+            // Automatically pastes clipboard ... a bit jarring
+            // but user gets what user wants
+            navigator.clipboard.readText().then(clipText => {
+                if (clipText) zeronode.nodeValue = clipText;
+            })
         } else {
             // Otherwise, set the cursor to the former position
             try {
                 rng.setStart(td.childNodes[nodeIndex], nodeOffset);
+                rng.setEnd(td.childNodes[nodeIndex], 
+                    nodeOffset + lenOfSelection);
             }
             catch(err) {
                 // TEMP FIX: TODO: Keep cursor position in string

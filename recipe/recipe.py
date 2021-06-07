@@ -121,6 +121,9 @@ def addrow():
     elif tableid == 'variables':
        newid = DBSession.query(
             func.max(model_classes[tableid].variable_id)).scalar()
+    elif tableid == 'metrics':
+       newid = DBSession.query(
+            func.max(model_classes[tableid].metric_id)).scalar()
     DBSession.commit()
     DBSession.close()
     return {'status': 'ok', 'newid': newid}
