@@ -35,11 +35,26 @@ function clearClip() {
     });
 }
 
+function readClip() {
+    navigator.permissions.query({name: "clipboard-write"}).then(result => {
+        if (result.state == "granted" || result.state == "prompt") {
+            console.log("clipboard is writable");
+        }
+    });
+    navigator.clipboard.readText().then(text => outputElem.innerText = text);
+    navigator.clipboard.readText().then(text => {
+        alert("clipboard contains" + text);
+    }, function() {
+        alert("clipboard read failed");
+    });
+}
+
 </script>
 
 <div class=bar_header>Tools</div>
 <button><a href="/recipe/tools">Done Editing</a></button>
 <button onclick=clearClip()>Clear Clipboard</button>
+<button onclick=readClip()>Read Clipboard</button>
 <div class=article>
     <div class=table_header>Tools</div>
     <table id=tools></table>
