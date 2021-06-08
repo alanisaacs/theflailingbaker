@@ -270,11 +270,6 @@ class TableCellEditing {
         if (zeronode.nodeValue === 'TYPE') {
             rng.setStart(zeronode, 0);
             rng.setEnd(zeronode, 4);
-            // Automatically pastes clipboard ... a bit jarring
-            // but user gets what user wants
-            navigator.clipboard.readText().then(clipText => {
-                if (clipText) zeronode.nodeValue = clipText;
-            })
         } else {
             // Otherwise, set the cursor to the former position
             try {
