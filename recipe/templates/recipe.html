@@ -65,10 +65,15 @@ function init_display_recipe() {
 
 <div class=bar_header>Recipe</div>
 <div class=article>
-    <p><button onclick="toggleShowAllNotes()">Show/Hide All Notes</button>
-        {% if current_user.is_authenticated %}
-            <a href="/recipe/recipe_edit">Edit Data</a></p>
-        {% endif %}
+    <div>
+        <p>
+            <button onclick="toggleShowAllNotes()">
+                Show/Hide All Notes</button>
+            {% if current_user.is_authenticated %}
+                <a href="/recipe/recipe_edit">Edit Data</a>
+            {% endif %}
+        </p>
+    </div>    
     <div id='recipebox'></div>
 </div>
 

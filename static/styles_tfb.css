@@ -125,9 +125,6 @@ td {
 .btn-save:hover {
     background-color: limegreen; 
 }
-.btn-save:active {
-    background-color: green; 
-}
 .btn-cancel {
     background-color: hotpink;
 }
@@ -144,4 +141,14 @@ td {
     background-color: black;
     color: lightgoldenrodyellow;
     cursor: pointer;
+}
+.show-hide-button {
+    float: right;
+    font-size: x-small;
+    text-align: right;
+    vertical-align: top;
+}
+.button-bar {
+    margin-bottom: 1.5rem;
+    margin-right: 3rem;
 }

@@ -27,13 +27,30 @@ function display_recipe(steps, substeps) {
                 stepbox.appendChild(subbox);
             }
         }
+        // Button to show/hide notes
+        let btnBar = document.createElement('div');
+        btnBar.className = 'button-bar';
+        let showHideBtn = document.createElement('button');
+        showHideBtn.className = 'show-hide-button';
+        showHideBtn.innerText = 'Show Notes';
+        stepbox.appendChild(btnBar);
+        btnBar.appendChild(showHideBtn);
         // Insert notes (hidden by default)
         let notesbox = document.createElement('div');
+        showHideBtn.addEventListener('click', 
+            ev => {
+                toggleVisibility(notesbox);
+                if (showHideBtn.innerText == 'Show Notes') {
+                    showHideBtn.innerText = 'Hide';
+                } else {
+                    showHideBtn.innerText = 'Show Notes';
+                }
+            })
         notesbox.className = 'notesbox';
         stepbox.appendChild(notesbox);
             let notesbar = document.createElement('div');
             notesbar.className = 'notesbar';
-            notesbar.innerHTML = 'notes'
+            notesbar.innerHTML = 'notes';
             notesbox.appendChild(notesbar);
             let stepnotes = document.createElement('div');
             stepnotes.className = 'item_notes';
@@ -107,9 +124,12 @@ function toggleShowAllNotes() {
     const notes = document.querySelectorAll('.notesbox');
     let isHidden = notes[0].getAttribute('hidden');
     for (let n of notes) {
+        let showHideBtn = n.previousElementSibling.children[0];
         if (isHidden) {
+            showHideBtn.innerText = 'Hide';
             n.removeAttribute('hidden');
         } else {
+            showHideBtn.innerText = 'Show Notes';
             n.setAttribute('hidden', true);
         }
     }
@@ -442,6 +462,14 @@ function getNodeCount(ele, index) {
     };
     //console.log('Returning nodeCount: ', nodeCount)
     return nodeCount;
+}
+
+function toggleVisibility(ele) {
+    if (ele.getAttribute('hidden')) {
+        ele.removeAttribute('hidden');
+    } else {
+        ele.setAttribute('hidden', true);
+    }
 }
 
 // For debugging
