@@ -54,11 +54,29 @@ function create_variables() {
     return all_vars;
 }
 
+function create_metrics() {
+    // Translate db object into JavaScript for processing
+    let all_metrics = [];
+    let m = {};
+    {% for metric in metrics %}
+        m = {};
+        // Use tojson filter to keep tags as they are in db
+        m.metric_id = {{ metric.metric_id|tojson }};
+        m.step_id = {{ metric.step_id|tojson }};
+        m.name = {{ metric.name|tojson }};
+        m.description = {{ metric.description|tojson }};
+        m.notes = {{ metric.notes|tojson }};
+        all_metrics.push(m);
+    {% endfor %}
+    return all_metrics;
+}
+
 function init_display_recipe() {
     let steps_all = create_procedure();
     let substeps_all = create_substeps();
     let variables_all = create_variables();
-    display_recipe(steps_all, substeps_all, variables_all);
+    let metrics_all = create_metrics();
+    display_recipe(steps_all, substeps_all, variables_all, metrics_all);
 }
 
 </script>
@@ -70,7 +88,8 @@ function init_display_recipe() {
             <button onclick="toggleShowAllNotes()">
                 Show/Hide All Notes</button>
             {% if current_user.is_authenticated %}
-                <a href="/recipe/recipe_edit">Edit Data</a>
+                <button onclick="window.location.href='/recipe/recipe_edit'">
+                Edit Data</button>
             {% endif %}
         </p>
     </div>    

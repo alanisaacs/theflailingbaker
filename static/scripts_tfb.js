@@ -2,7 +2,7 @@
 
 // ======= DISPLAY IN DIVS =======
 
-function display_recipe(steps, substeps) {
+function display_recipe(steps, substeps, variables, metrics) {
     // Inputs: Each parameter is an array of objects
     // each object is a row in the db with columns as keys
     const recipebox = document.getElementById('recipebox');
@@ -60,9 +60,88 @@ function display_recipe(steps, substeps) {
         // Box for the notes text itsef
         let stepnotes = document.createElement('div');
         stepnotes.className = 'item_notes';
-        stepnotes.innerHTML = convertUserMarkup(step.notes);
+        // Format the notes
+        let noteStr = convertUserMarkup(step.notes);
+        noteStr = markup_multiline_notes(noteStr);
+        stepnotes.innerHTML = `<ul>${noteStr}</ul>`;
         notesbox.setAttribute('hidden', true);
         notesbox.appendChild(stepnotes);
+        // Create box for metrics if there are any
+        let hasMetric = false;
+        let metricsbox = document.createElement('div');
+        metricsbox.className = 'metricsbox';
+        let metricslist = document.createElement('ul');
+        for (metric of metrics) {
+            if (metric.step_id === step.step_id) {
+                // Found the first metric, so write header
+                if (hasMetric === false) {
+                    // Add a title bar
+                    let metricsTitleBar = document.createElement('div');
+                    metricsTitleBar.className = 'notesbar';
+                    metricsTitleBar.innerHTML = 'What to Look For';
+                    metricsbox.appendChild(metricsTitleBar);
+                    metricsbox.appendChild(metricslist);
+                    // Toggle flag so header is written just once
+                    hasMetric = true;
+                }
+                let onemetric = document.createElement('li');
+                let listStr = `<strong>${metric.name}</strong>`;
+                if (metric.description) {
+                    listStr += `<ul>`;
+                    listStr +=
+                        `<li>${metric.description}`;
+                    if (metric.notes) {
+                        listStr += markup_multiline_notes(metric.notes);
+                    }
+                    listStr += `</ul>`;
+                }
+                onemetric.innerHTML = listStr;
+                metricslist.appendChild(onemetric);
+            }
+        }
+        // If there are metrics, write their box inside notesbox
+        if (hasMetric === true) {
+            metricsbox.appendChild(metricslist);
+            notesbox.appendChild(metricsbox);
+        }
+        // Create box for variables just like for metrics
+        let hasVar = false;
+        let varbox = document.createElement('div');
+        varbox.className = 'varbox';
+        let varlist = document.createElement('ul');
+        for (variable of variables) {
+            if (variable.step_id === step.step_id) {
+                // Found the first variable, so write header
+                if (hasVar === false) {
+                    // Add a title bar
+                    let variablesTitleBar = document.createElement('div');
+                    variablesTitleBar.className = 'notesbar';
+                    variablesTitleBar.innerHTML = 'variables';
+                    varbox.appendChild(variablesTitleBar);
+                    varbox.appendChild(varlist);
+                    // Toggle flag so header is written just once
+                    hasVar = true;
+                }
+                let onevar = document.createElement('li');
+                let listStr = `<strong>${variable.name}</strong>`;
+                if (variable.description) {
+                    listStr += `<ul>`;
+                    listStr +=
+                        `<li>${variable.description}`;
+                    if (variable.notes) {
+                        listStr += markup_multiline_notes(variable.notes);
+                    }
+                    listStr += `</ul>`;
+                }
+                onevar.innerHTML = listStr;
+                varlist.appendChild(onevar);
+            }
+        }
+        // If there are variables, write their box inside notesbox
+        if (hasVar === true) {
+            varbox.appendChild(varlist);
+            notesbox.appendChild(varbox);
+        }
     }
 }
 
@@ -479,6 +558,20 @@ function markup_for_editing(str) {
     // Now bring back <br> so those you don't see
     s = s.replace(/=br=/g, '<br>')
     return s;
+}
+
+function markup_multiline_notes(str) {
+    // Remove initial hyphens
+    let noteStr = str.replace(/^- /, '')
+    // Prefix whole string with a <LI> node
+    noteStr = "<li>".concat(noteStr);
+    // Some notes have <BR> tags in them
+    // (followed by hyphen+space)
+    // Make these into additional <LI> nodes
+    noteStr = noteStr.replace(/<br>- /g, '<li>');
+    // Remove any trailing <LI> nodes
+    noteStr = noteStr.replace(/<li>$/g, '');
+    return noteStr;
 }
 
 function getNodeCount(ele, index) {

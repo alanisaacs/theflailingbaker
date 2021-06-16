@@ -85,12 +85,13 @@ body {
 .item_notes {
     font-size: medium;
     font-weight: normal;
-    padding: 1rem;
+    /* padding: 1rem; */
 }
 
 .notesbox {
     border: 1px solid darkred;
     margin: 1rem 3rem;
+    /* padding-right: 1.5rem; */
 }
 
 .notesbar {
@@ -103,6 +104,18 @@ body {
 .subbox {
     font-size: large;
     margin: 1rem 2rem;
+}
+
+.metricsbox {
+    font-size: medium;
+    font-weight: normal;
+    margin: 1rem 0rem;
+}
+
+.varbox {
+    font-size: medium;
+    font-weight: normal;
+    margin: 1rem 0rem;
 }
 
 /* ======= Editing Cells in Table ======= */
