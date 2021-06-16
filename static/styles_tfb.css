@@ -101,6 +101,10 @@ body {
     padding-left: 1rem;
 }
 
+.notesListBody {
+    padding-right: 1.5rem;
+}
+
 .subbox {
     font-size: large;
     margin: 1rem 2rem;

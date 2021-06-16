@@ -8,19 +8,19 @@ function display_recipe(steps, substeps, variables, metrics) {
     const recipebox = document.getElementById('recipebox');
     for (step of steps) {
         // Create and display the "box" the step lives in
-        let stepbox = document.createElement('div');
+        const stepbox = document.createElement('div');
         stepbox.className = 'item_name';
         stepbox.innerHTML = `Step ${step.step}. ${step.name}`;
         recipebox.appendChild(stepbox);
         // Inside the step box, make a new box for the description
-        let stepdesc = document.createElement('div');
+        const stepdesc = document.createElement('div');
         stepdesc.className = 'item_desc';
         stepdesc.innerHTML = convertUserMarkup(step.description);
         stepbox.appendChild(stepdesc);
         // Under the description, insert a box for substeps
         for (substep of substeps) {
             if (substep.step_id === step.step_id) {
-                let subbox = document.createElement('div');
+                const subbox = document.createElement('div');
                 subbox.className = 'subbox';
                 subbox.innerHTML = 
                     `${step.step}.` +
@@ -31,15 +31,15 @@ function display_recipe(steps, substeps, variables, metrics) {
         }
         // Under the substeps, make a button to toggle visibility
         // of the notes (wrapped in a div to locate it on the right)
-        let btnBar = document.createElement('div');
+        const btnBar = document.createElement('div');
         btnBar.className = 'button-bar';
-        let showHideBtn = document.createElement('button');
+        const showHideBtn = document.createElement('button');
         showHideBtn.className = 'show-hide-button';
         showHideBtn.innerText = 'Show Notes';
         stepbox.appendChild(btnBar);
         btnBar.appendChild(showHideBtn);
         // Insert a box for the notes 
-        let notesbox = document.createElement('div');
+        const notesbox = document.createElement('div');
         // Event for handling clicks on the visibility toggle
         showHideBtn.addEventListener('click', 
             ev => {
@@ -53,12 +53,12 @@ function display_recipe(steps, substeps, variables, metrics) {
         notesbox.className = 'notesbox';
         stepbox.appendChild(notesbox);
         // The notes box itself has a title bar
-        let notesbar = document.createElement('div');
+        const notesbar = document.createElement('div');
         notesbar.className = 'notesbar';
         notesbar.innerHTML = 'notes';
         notesbox.appendChild(notesbar);
         // Box for the notes text itsef
-        let stepnotes = document.createElement('div');
+        const stepnotes = document.createElement('div');
         stepnotes.className = 'item_notes';
         // Format the notes
         let noteStr = convertUserMarkup(step.notes);
@@ -68,23 +68,28 @@ function display_recipe(steps, substeps, variables, metrics) {
         notesbox.appendChild(stepnotes);
         // Create box for metrics if there are any
         let hasMetric = false;
-        let metricsbox = document.createElement('div');
+        const metricsbox = document.createElement('div');
         metricsbox.className = 'metricsbox';
-        let metricslist = document.createElement('ul');
+        // Metrics DIV has children for both title and body
+        const metricsListBody = document.createElement('div');
+        metricsListBody.className = 'notesListBody';
+        // Body is composed of ULs (can be nested)
+        const metricslist = document.createElement('ul');
         for (metric of metrics) {
             if (metric.step_id === step.step_id) {
                 // Found the first metric, so write header
                 if (hasMetric === false) {
                     // Add a title bar
-                    let metricsTitleBar = document.createElement('div');
+                    const metricsTitleBar = document.createElement('div');
                     metricsTitleBar.className = 'notesbar';
                     metricsTitleBar.innerHTML = 'What to Look For';
                     metricsbox.appendChild(metricsTitleBar);
-                    metricsbox.appendChild(metricslist);
+                    metricsbox.appendChild(metricsListBody);
+                    metricsListBody.appendChild(metricslist);
                     // Toggle flag so header is written just once
                     hasMetric = true;
                 }
-                let onemetric = document.createElement('li');
+                const onemetric = document.createElement('li');
                 let listStr = `<strong>${metric.name}</strong>`;
                 if (metric.description) {
                     listStr += `<ul>`;
@@ -101,20 +106,20 @@ function display_recipe(steps, substeps, variables, metrics) {
         }
         // If there are metrics, write their box inside notesbox
         if (hasMetric === true) {
-            metricsbox.appendChild(metricslist);
+            //metricsbox.appendChild(metricslist);
             notesbox.appendChild(metricsbox);
         }
         // Create box for variables just like for metrics
         let hasVar = false;
-        let varbox = document.createElement('div');
+        const varbox = document.createElement('div');
         varbox.className = 'varbox';
-        let varlist = document.createElement('ul');
+        const varlist = document.createElement('ul');
         for (variable of variables) {
             if (variable.step_id === step.step_id) {
                 // Found the first variable, so write header
                 if (hasVar === false) {
                     // Add a title bar
-                    let variablesTitleBar = document.createElement('div');
+                    const variablesTitleBar = document.createElement('div');
                     variablesTitleBar.className = 'notesbar';
                     variablesTitleBar.innerHTML = 'variables';
                     varbox.appendChild(variablesTitleBar);
@@ -122,7 +127,7 @@ function display_recipe(steps, substeps, variables, metrics) {
                     // Toggle flag so header is written just once
                     hasVar = true;
                 }
-                let onevar = document.createElement('li');
+                const onevar = document.createElement('li');
                 let listStr = `<strong>${variable.name}</strong>`;
                 if (variable.description) {
                     listStr += `<ul>`;
