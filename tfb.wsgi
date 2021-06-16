@@ -17,6 +17,3 @@ logging.basicConfig(stream=sys.stderr)
 sys.path.insert(0, '/var/www/tfb/')
 
 from __init__ import app as application
-
-# Secret key is set in /etc/apache2/envvars
-#application.secret_key = 'KJyg7'
