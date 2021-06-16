@@ -83,15 +83,19 @@ function init_display_recipe() {
 
 <div class=bar_header>Recipe</div>
 <div class=article>
-    <div>
-        <p>
-            <button onclick="toggleShowAllNotes()">
-                Show/Hide All Notes</button>
-            {% if current_user.is_authenticated %}
-                <button onclick="window.location.href='/recipe/recipe_edit'">
+    <div class=articleIntro>
+        My current, always-evolving recipe. I try to make the steps look
+        simple; show the notes to see more details.
+    </div>
+    <div class=articleNav>
+        <button class='articleBtn' 
+            onclick="toggleShowAllNotes()">
+            Show/Hide All Notes</button>
+        {% if current_user.is_authenticated %}
+            <button class='articleBtn' 
+                onclick="window.location.href='/recipe/recipe_edit'">
                 Edit Data</button>
-            {% endif %}
-        </p>
+        {% endif %}
     </div>    
     <div id='recipebox'></div>
 </div>

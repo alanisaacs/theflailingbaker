@@ -29,15 +29,21 @@ function init_display_tools() {
 
 <div class=bar_header>Tools</div>
 <div class=article>
-    <div class=table_intro>
+    <div class=articleIntro>
         All of these have many possible substitutes&mdash;
         I'm just listing out my current set.
     </div>
-    <p><button onclick="toggleShowAllNotes()">Show/Hide All Notes</button>
+    <div class=articleNav>
+        <button class='articleBtn' 
+            onclick="toggleShowAllNotes()">
+            Show/Hide All Notes</button>
         {% if current_user.is_authenticated %}
-            <a href="/recipe/tools_edit">Edit Data</a></p>
+            <button class='articleBtn' 
+                onclick="window.location.href='/recipe/tools_edit'">
+                Edit Data</button>
         {% endif %}
-    <div id=toolbox class=toolbox></div>
+    </div>
+    <div id=toolbox></div>
 </div>
 <script>init_display_tools()</script>
 

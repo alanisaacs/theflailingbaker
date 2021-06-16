@@ -54,8 +54,17 @@ body {
     padding: .5rem;
 }
 
-.table_intro {
+.articleIntro {
     padding: .5rem;
+}
+
+.articleNav {
+    margin-bottom: 1.5rem;
+    padding: .5rem;
+}
+.articleBtn {
+    float: right;
+    margin-left: 1rem;
 }
 
 /* ======= Design with Divs ======= */
@@ -67,14 +76,14 @@ body {
     padding: 10px;
 }
 
-.item_name {
+.itembox {
     border-top: 1px solid black;
     font-size: x-large;
     font-weight: bold;
     padding: 1rem;
 }
 
-.item_desc {
+.itemDesc {
     font-size: medium;
     font-weight: normal;
     padding-top: .5rem;
@@ -82,10 +91,10 @@ body {
     padding-left: 2rem;
 }
 
-.item_notes {
+.itemNotes {
     font-size: medium;
     font-weight: normal;
-    /* padding: 1rem; */
+    padding-right: 2rem;
 }
 
 .notesbox {
@@ -94,10 +103,12 @@ body {
     /* padding-right: 1.5rem; */
 }
 
-.notesbar {
+.notesBar {
     background-color: darkred;
     color: white;
     font-size: medium;
+    padding-top: .25rem;
+    padding-bottom: .25rem;
     padding-left: 1rem;
 }
 
@@ -159,13 +170,13 @@ td {
     color: lightgoldenrodyellow;
     cursor: pointer;
 }
-.show-hide-button {
+.showHideButton {
     float: right;
     font-size: x-small;
     text-align: right;
     vertical-align: top;
 }
-.button-bar {
+.buttonBar {
     margin-bottom: 1.5rem;
     margin-right: 3rem;
 }

@@ -5,16 +5,18 @@
 function display_recipe(steps, substeps, variables, metrics) {
     // Inputs: Each parameter is an array of objects
     // each object is a row in the db with columns as keys
+    // The whole recipe container is defined in the html
     const recipebox = document.getElementById('recipebox');
+    recipebox.className = 'recipebox';
     for (step of steps) {
         // Create and display the "box" the step lives in
         const stepbox = document.createElement('div');
-        stepbox.className = 'item_name';
+        stepbox.className = 'itembox';
         stepbox.innerHTML = `Step ${step.step}. ${step.name}`;
         recipebox.appendChild(stepbox);
         // Inside the step box, make a new box for the description
         const stepdesc = document.createElement('div');
-        stepdesc.className = 'item_desc';
+        stepdesc.className = 'itemDesc';
         stepdesc.innerHTML = convertUserMarkup(step.description);
         stepbox.appendChild(stepdesc);
         // Under the description, insert a box for substeps
@@ -32,9 +34,9 @@ function display_recipe(steps, substeps, variables, metrics) {
         // Under the substeps, make a button to toggle visibility
         // of the notes (wrapped in a div to locate it on the right)
         const btnBar = document.createElement('div');
-        btnBar.className = 'button-bar';
+        btnBar.className = 'buttonBar';
         const showHideBtn = document.createElement('button');
-        showHideBtn.className = 'show-hide-button';
+        showHideBtn.className = 'showHideButton';
         showHideBtn.innerText = 'Show Notes';
         stepbox.appendChild(btnBar);
         btnBar.appendChild(showHideBtn);
@@ -53,13 +55,13 @@ function display_recipe(steps, substeps, variables, metrics) {
         notesbox.className = 'notesbox';
         stepbox.appendChild(notesbox);
         // The notes box itself has a title bar
-        const notesbar = document.createElement('div');
-        notesbar.className = 'notesbar';
-        notesbar.innerHTML = 'notes';
-        notesbox.appendChild(notesbar);
+        const notesBar = document.createElement('div');
+        notesBar.className = 'notesBar';
+        notesBar.innerHTML = 'Notes';
+        notesbox.appendChild(notesBar);
         // Box for the notes text itsef
         const stepnotes = document.createElement('div');
-        stepnotes.className = 'item_notes';
+        stepnotes.className = 'itemNotes';
         // Format the notes
         let noteStr = convertUserMarkup(step.notes);
         noteStr = markup_multiline_notes(noteStr);
@@ -81,7 +83,7 @@ function display_recipe(steps, substeps, variables, metrics) {
                 if (hasMetric === false) {
                     // Add a title bar
                     const metricsTitleBar = document.createElement('div');
-                    metricsTitleBar.className = 'notesbar';
+                    metricsTitleBar.className = 'notesBar';
                     metricsTitleBar.innerHTML = 'What to Look For';
                     metricsbox.appendChild(metricsTitleBar);
                     metricsbox.appendChild(metricsListBody);
@@ -106,13 +108,14 @@ function display_recipe(steps, substeps, variables, metrics) {
         }
         // If there are metrics, write their box inside notesbox
         if (hasMetric === true) {
-            //metricsbox.appendChild(metricslist);
             notesbox.appendChild(metricsbox);
         }
         // Create box for variables just like for metrics
         let hasVar = false;
         const varbox = document.createElement('div');
         varbox.className = 'varbox';
+        const varListBody = document.createElement('div');
+        varListBody.className = 'notesListBody';
         const varlist = document.createElement('ul');
         for (variable of variables) {
             if (variable.step_id === step.step_id) {
@@ -120,10 +123,11 @@ function display_recipe(steps, substeps, variables, metrics) {
                 if (hasVar === false) {
                     // Add a title bar
                     const variablesTitleBar = document.createElement('div');
-                    variablesTitleBar.className = 'notesbar';
-                    variablesTitleBar.innerHTML = 'variables';
+                    variablesTitleBar.className = 'notesBar';
+                    variablesTitleBar.innerHTML = 'Variables';
                     varbox.appendChild(variablesTitleBar);
-                    varbox.appendChild(varlist);
+                    varbox.appendChild(varListBody);
+                    varListBody.appendChild(varlist);
                     // Toggle flag so header is written just once
                     hasVar = true;
                 }
@@ -144,7 +148,6 @@ function display_recipe(steps, substeps, variables, metrics) {
         }
         // If there are variables, write their box inside notesbox
         if (hasVar === true) {
-            varbox.appendChild(varlist);
             notesbox.appendChild(varbox);
         }
     }
@@ -153,26 +156,28 @@ function display_recipe(steps, substeps, variables, metrics) {
 function display_tools(tools) {
     // Input: Array of objects; each object is a row in the db
     // With keys id, name, and description
+    // The whole tools container is defined in the html
     const toolbox = document.getElementById('toolbox');
+    toolbox.className = 'toolbox';
     for (tool of tools) {
         // DIV for tool with name at top
-        let tname = document.createElement('div');
-        tname.className = 'item_name';
-        tname.innerHTML = `${tool.id}. ${tool.name}`;
-        toolbox.appendChild(tname);
+        const tbox = document.createElement('div');
+        tbox.className = 'itembox';
+        tbox.innerHTML = `${tool.id}. ${tool.name}`;
+        toolbox.appendChild(tbox);
         // DIV for description appended to name
-        let tdesc = document.createElement('div');
-        tdesc.className = 'item_desc';
+        const tdesc = document.createElement('div');
+        tdesc.className = 'itemDesc';
         tdesc.innerHTML = convertUserMarkup(tool.description);
-        tname.appendChild(tdesc);
+        tbox.appendChild(tdesc);
         // DIV for notes appended to name
         let notetext = convertUserMarkup(tool.notes);
         let notesbox = createNotesBox(notetext);
         notesbox.setAttribute('hidden', true);
         // DIV with button for toggling visibility of notes
         let btnBar = createShowHideBtn(notesbox)
-        tname.appendChild(btnBar)
-        tname.appendChild(notesbox);
+        tbox.appendChild(btnBar)
+        tbox.appendChild(notesbox);
     }
 }
 
@@ -180,9 +185,9 @@ function createShowHideBtn(ele) {
     // Input: element whose visibility is to be toggled on/off
     // Output: DIV wrapping toggle button on its right
     let btnBar = document.createElement('div');
-    btnBar.className = 'button-bar';
+    btnBar.className = 'buttonBar';
     let showHideBtn = document.createElement('button');
-    showHideBtn.className = 'show-hide-button';
+    showHideBtn.className = 'showHideButton';
     // Event for handling clicks on the visibility toggle
     showHideBtn.addEventListener('click', 
     ev => {
@@ -204,14 +209,17 @@ function createNotesBox(txt) {
     let nb = document.createElement('div');
     nb.className = 'notesbox';
     // DIV for title bar at top of notes
-    let notesbar = document.createElement('div');
-    notesbar.className = 'notesbar';
-    notesbar.innerHTML = 'notes'
-    nb.appendChild(notesbar);
+    let notesBar = document.createElement('div');
+    notesBar.className = 'notesBar';
+    notesBar.innerHTML = 'Notes'
+    nb.appendChild(notesBar);
     // DIV for text of notes
     let notetext = document.createElement('div');
-    notetext.className = 'item_notes';
-    notetext.innerHTML = txt;
+    notetext.className = 'itemNotes';
+    // Format the notes
+    let noteStr = convertUserMarkup(txt);
+    noteStr = markup_multiline_notes(noteStr);
+    notetext.innerHTML = `<ul>${noteStr}</ul>`;
     nb.appendChild(notetext);
     return nb;
 }
