@@ -47,12 +47,14 @@ body {
     text-align: center; 
 }
 
-/* ======= Design with Tables ======= */
+/* ======= Table display for editing ======= */
 .table_header {
     background-color: #00008b;
     color:#ffe4e1;
     padding: .5rem;
 }
+
+/* ======= Recipe and Tools Display ======= */
 
 .articleIntro {
     padding: .5rem;
@@ -62,21 +64,17 @@ body {
     margin-bottom: 1.5rem;
     padding: .5rem;
 }
+
 .articleBtn {
     float: right;
     margin-left: 1rem;
 }
 
-/* ======= Design with Divs ======= */
-.toolbox {
+.collectionBox {
     padding: 10px;
 }
 
-.recipebox {
-    padding: 10px;
-}
-
-.itembox {
+.itemBox {
     border-top: 1px solid black;
     font-size: x-large;
     font-weight: bold;
@@ -97,10 +95,9 @@ body {
     padding-right: 2rem;
 }
 
-.notesbox {
+.notesBox {
     border: 1px solid darkred;
     margin: 1rem 3rem;
-    /* padding-right: 1.5rem; */
 }
 
 .notesBar {
@@ -116,18 +113,18 @@ body {
     padding-right: 1.5rem;
 }
 
-.subbox {
+.subBox {
     font-size: large;
     margin: 1rem 2rem;
 }
 
-.metricsbox {
+.metricsBox {
     font-size: medium;
     font-weight: normal;
     margin: 1rem 0rem;
 }
 
-.varbox {
+.varBox {
     font-size: medium;
     font-weight: normal;
     margin: 1rem 0rem;
@@ -176,7 +173,7 @@ td {
     text-align: right;
     vertical-align: top;
 }
-.buttonBar {
+.showHideBtnBar {
     margin-bottom: 1.5rem;
     margin-right: 3rem;
 }
