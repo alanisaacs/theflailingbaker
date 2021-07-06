@@ -13,3 +13,8 @@ def showSiteIndex():
     """Display index page"""
     return render_template('home.html')
 
+# Display about page
+@home_bp.route('/about')
+def showAbout():
+    """Display about page"""
+    return render_template('about.html')
