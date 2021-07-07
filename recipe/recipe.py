@@ -73,6 +73,12 @@ def editTools():
     DBSession.close()
     return render_template('tools_edit.html', tools=tools)
 
+# Display schedule page
+@recipe_bp.route('/recipe/schedule')
+def showSchedule():
+    """Display schedule page"""
+    return render_template('schedule.html')
+
 @recipe_bp.route('/update_cell', methods=['POST'])
 def update_cell():
     """Update the DB with data sent from page"""
