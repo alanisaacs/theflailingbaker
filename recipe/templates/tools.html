@@ -27,7 +27,10 @@ function init_display_tools() {
 
 </script>
 
-<div class=bar_header>Tools</div>
+<div class=bar_header>Tools
+    <!-- TODO: REMOVE THIS DEVELOPMENT CODE -->
+    <div id=debugDisplay style='display: inline'></div>
+</div>
 <div class=article>
     <div class=articleIntro>
         All of these have many possible substitutes&mdash;
@@ -46,5 +49,13 @@ function init_display_tools() {
     <div id=toolBox></div>
 </div>
 <script>init_display_tools()</script>
-
+<script>
+    // TODO: REMOVE THIS DEVELOPMENT CODE
+    function showWidth() {
+        document.getElementById('debugDisplay').innerHTML = 
+            window.innerWidth;
+    }
+    showWidth();
+    window.addEventListener('resize', showWidth);
+</script>
 {% endblock %}

@@ -14,11 +14,31 @@
 
 body {
     /* Extend background color to entire canvas */
-    /* background-color: #ffff70; */
     background-color: var(--body-background-color);
 }
 
-/* ======= Page Layout ======= */
+/* ======= Media Rules ======= */
+
+@media (min-width): 500px {
+	body {
+		background-color: blue;
+	}
+}
+@media only screen and (max-width: 400px) {
+    .apho {
+	    padding: 1rem 1rem;
+    }
+}
+@media only screen and (min-width: 400px) {
+    .apho {
+	    padding: 1rem 2rem;
+    }
+}
+@media only screen and (min-width: 600px) {
+    .apho {
+	    padding: 1rem 3rem;
+    }
+}
 
 /* ======= Title and nav bar ======= */
 
@@ -42,9 +62,15 @@ body {
 } */
 
 /* ======= Home page image ======= */
+
 .loaf {
     margin-top: 10px;
     text-align: center; 
+}
+
+.loaf img {
+    height: auto;
+    max-width: 100%;
 }
 
 /* ======= Table display for editing ======= */
