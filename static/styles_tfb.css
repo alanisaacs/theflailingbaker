@@ -17,29 +17,6 @@ body {
     background-color: var(--body-background-color);
 }
 
-/* ======= Media Rules ======= */
-
-@media (min-width): 500px {
-	body {
-		background-color: blue;
-	}
-}
-@media only screen and (max-width: 400px) {
-    .apho {
-	    padding: 1rem 1rem;
-    }
-}
-@media only screen and (min-width: 400px) {
-    .apho {
-	    padding: 1rem 2rem;
-    }
-}
-@media only screen and (min-width: 600px) {
-    .apho {
-	    padding: 1rem 3rem;
-    }
-}
-
 /* ======= Title and nav bar ======= */
 
 #main_title {
@@ -129,7 +106,7 @@ body {
 .notesBar {
     background-color: darkred;
     color: white;
-    font-size: medium;
+    font-size: small;
     padding-top: .25rem;
     padding-bottom: .25rem;
     padding-left: 1rem;
@@ -202,4 +179,77 @@ td {
 .showHideBtnBar {
     margin-bottom: 1.5rem;
     margin-right: 3rem;
+}
+
+/* ======= Media Rules ======= */
+
+/* Override article defaults in styles_all.css */
+/* Narrow Width: minimal padding */
+@media only screen and (max-width: 500px) {
+    .article {
+	    padding: .5rem 0rem;
+    }
+    .collectionBox {
+        padding: 1rem 0rem;
+    }
+    .itemBox {
+        padding: 1rem 0rem;
+    }
+    .itemDesc {
+        padding: .5rem;
+    }
+    .notesBox {
+        margin: .25rem;
+    }
+    .notesBar {
+        padding: .25rem;
+    }
+    .itemNotes {
+        padding: 0rem 1rem 0rem 0rem;
+    }
+    ul {
+        padding-inline-start: 30px;
+    }
+}
+/* Medium Width: flexible padding */
+@media only screen and (min-width: 500px) {
+    .bar_header {
+        padding: 1rem 10%;
+    }
+    .article {
+	    padding: 1rem 10%;
+    }
+    .collectionBox {
+        padding: 1rem 0rem;
+    }
+    .itemBox {
+        padding: 1rem 0rem;
+    }
+    .itemDesc {
+        padding: .5rem;
+    }
+    .notesBox {
+        margin: .5rem;
+    }
+    .notesBar {
+        padding: .25rem;
+    }
+    .itemNotes {
+        padding: 0rem 1rem 0rem 0rem;
+    }
+    ul {
+        padding-inline-start: 30px;
+    }
+
+}
+/* Large Width: fix content width */
+@media only screen and (min-width: 900px) {
+    .bar_header {
+        margin: auto;
+        width: 700px;
+    }
+    .article {
+        margin: auto;
+        width: 700px;
+    }
 }
