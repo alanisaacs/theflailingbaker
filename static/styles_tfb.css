@@ -17,6 +17,21 @@ body {
     background-color: var(--body-background-color);
 }
 
+/* ======= Site Fonts ======= */
+#main_title {
+    font-family: "Libre Baskerville", Garamond, "Times New Roman", serif;
+}
+#nav_bar {
+    font-family: "Spectral", Garamond, "Times New Roman", serif;
+}
+/* Overwrite styles_all.css */
+.bar_header {
+    font-family: "Libre Baskerville", Garamond, "Times New Roman", serif;
+}
+#main_section {
+    font-family: "Spectral", Garamond, "Times New Roman", serif;
+}
+
 /* ======= Title and nav bar ======= */
 
 #main_title {
