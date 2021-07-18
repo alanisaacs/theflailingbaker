@@ -2,22 +2,26 @@
 
 {% block content %}
 
-    <div class=bar_header>Create a New Account</div>
+<header id=mainHeader>
+	<h1>User Management</h1>
+</header>
 
-    <form action="/tfbNewUser" method="post">
-        <p>
-            <label for="username">Username:</label>
-            <input type="text" name="username" required>
-        </p>
-        <p>
-            <label for="password">Password:</label>
-            <input type="password" name="password" required>
-        </p>
-        <p>
-            <button type="submit">
-                Submit
-            </button>
-        </p>
-    </form>
+<h2>Create a New Account</h2>
+
+<form action="/tfbNewUser" method="post">
+    <p>
+        <label for="username">Username:</label>
+        <input type="text" name="username" required>
+    </p>
+    <p>
+        <label for="password">Password:</label>
+        <input type="password" name="password" required>
+    </p>
+    <p>
+        <button type="submit">
+            Submit
+        </button>
+    </p>
+</form>
 
 {% endblock %}

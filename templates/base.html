@@ -18,68 +18,71 @@
 </head>
 
 <body>
-    <div id="body_wrap">
-        <header id="main_header">
-            <div id="main_title">
-               The Flailing Baker
-            </div>
-            <nav id="nav_bar">
-                <div class="nav_item">
+    <div id="bodyWrap">
+        <header id="siteTitle">The Flailing Baker</header>
+            <nav>
+                <ul>
+                <li>
                     <a href="http://exultoshores.com">EOS</a>
-                </div>
-                <div class="nav_item">
+                </li>
+                <li>
                     <a href="/">Home</a>
-                </div>
-                <!-- <div class="nav_item">
+                </li>
+                <!-- <li>
                     <a href="/blog">Blog</a>
-                </div>
-                <div class="nav_item">
+                </li>
+                <li>
                     <a href="/insights">Insights</a>
-                </div>
-                <div class="nav_item">
+                </li>
+                <li>
                     <a href="/loaflog">Loaflog</a>
-                </div> -->
-                <div class="nav_item">
+                </li> -->
+                <li>
                     <a href="/recipe">Recipe</a>
-                </div>
-                <div class="nav_item">
+                </li>
+                <li>
                     <a href="/recipe/tools">Tools</a>
-                </div>
-                <div class="nav_item">
+                </li>
+                <li>
                     <a href="/recipe/schedule">Schedule</a>
-                </div>
-                <div class="nav_item">
+                </li>
+                <li>
                     <a href="/about">About</a>
-                </div>
+                </li>
                 {% if current_user.is_authenticated %}
-                Welcome {{ current_user.username }}!
-                    <div class="nav_item">
+                    <li>
+                        Welcome {{ current_user.username }}!
+                    </li>
+                    <li>
                         <a href="/logout">Log Out</a>
-                    </div>
+                    </li>
                     {% else %}
-                    <div class="nav_item">
+                    <li>
                         <a href="/login">Log In</a>
-                    </div>
+                    </li>
                 {% endif %}
-        </header>
+            </ul>
+        </nav>
 
-        <section id="main_section">
-            <div class="flash_messages">
-                {% with messages = get_flashed_messages(with_categories=true) %}
-                    {% if messages %}
-                        {% for category, message in messages %}
-                            <div class="{{ category }}">{{ message }}</div>
-                        {% endfor %}
-                    {% endif %}
-                {% endwith %}
-            </div>
+        <section id=notifications>
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+        </section>
+        
+        <main>
             
             {% block content %}
             {% endblock %}
-        </section>
+            
+        </main>
 
-        <footer id="main_footer">
-			<script>show_footer()</script>
+        <footer id=pageFooter>
+			<script>showPageFooter()</script>
         </footer>
     </div>
 
