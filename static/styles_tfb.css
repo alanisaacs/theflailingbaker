@@ -8,6 +8,9 @@
     --main-title-color: #556b2f;
     --nav-item-color: #00008b;
     --nav-item-hover-color: #ff6347;
+    --dark-zone-color: #89738c;
+	--btn-background-color: #e6e6e6;
+	--btn-color: #38471f;
 }
 
 /* ======= Table display for editing ======= */
@@ -29,8 +32,11 @@
 }
 
 .articleBtn {
+    /* TO BE REPLACED */
+    border: 1px solid var(--btn-color);
     float: right;
     margin-left: 1rem;
+    padding: 3px 6px;
 }
 
 .collectionBox {
@@ -93,6 +99,12 @@
     margin: 1rem 0rem;
 }
 
+/* ======= Table Display */
+
+.scheduleWrapper {
+    margin: 1em;
+}
+
 /* ======= Editing Cells in Table ======= */
 
 td {
@@ -131,8 +143,10 @@ td {
     cursor: pointer;
 }
 .showHideButton {
+    border: 1px solid var(--btn-color);
     float: right;
     font-size: x-small;
+    padding: 2px 4px;
     text-align: right;
     vertical-align: top;
 }
