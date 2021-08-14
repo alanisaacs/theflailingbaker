@@ -11,6 +11,9 @@
     --dark-zone-color: #89738c;
 	--btn-background-color: #e6e6e6;
 	--btn-color: #38471f;
+    --btn-hover-bckg-color:  #cefdce;
+	--btn-active-bckg-color: #85fa85;
+	--btn-active-color: #c969c9;
 }
 
 /* ======= Table display for editing ======= */
