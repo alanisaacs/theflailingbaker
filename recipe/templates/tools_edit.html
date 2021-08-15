@@ -32,12 +32,22 @@ function display_tools_as_table() {
 <header id=mainHeader>
 	<h1>Edit Tools</h1>
 </header>
-<button><a href="/recipe/tools">Done Editing</a></button>
-<div class=article>
+<div class=posLeftOfVP>
+    <button><a href="/recipe/tools">Done Editing</a></button>
     <div class=table_header>Tools</div>
     <table id=tools></table>
+    <button><a href="/recipe/tools">Done Editing</a></button>
 </div>
-<button><a href="/recipe/tools">Done Editing</a></button>
-<script>display_tools_as_table()</script>
+<script>
+    // Move the footer so it is a child of the div around the table
+    // Otherwise the footer will render on top of the table
+    // because the table is absolute positioned
+    window.addEventListener('DOMContentLoaded', () => {
+        const pf = document.getElementById('pageFooter');
+        const tableWrapper = document.querySelector('.posLeftOfVP');
+        tableWrapper.appendChild(pf);
+    });
+    display_tools_as_table()
+</script>
 
 {% endblock %}

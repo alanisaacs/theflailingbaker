@@ -35,7 +35,6 @@
 }
 
 .articleBtn {
-    /* TO BE REPLACED */
     border: 1px solid var(--btn-color);
     float: right;
     margin-left: 1rem;

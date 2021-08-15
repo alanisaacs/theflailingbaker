@@ -99,7 +99,7 @@ function display_all_tables() {
 <header id=mainHeader>
 	<h1>Edit Recipe</h1>
 </header>
-<div class=article>
+<div class=posLeftOfVP>
     <button><a href="/recipe">Done Editing</a></button>
     <div class=table_header>EDIT PROCEDURE TABLE</div>
     <table id=procedure></table>
@@ -115,6 +115,16 @@ function display_all_tables() {
     <button><a href="/recipe">Done Editing</a></button>
 </div>
 
-<script>display_all_tables()</script>
+<script>
+    // Move the footer so it is a child of the div around the table
+    // Otherwise the footer will render on top of the table
+    // because the table is absolute positioned
+    window.addEventListener('DOMContentLoaded', () => {
+        const pf = document.getElementById('pageFooter');
+        const tableWrapper = document.querySelector('.posLeftOfVP');
+        tableWrapper.appendChild(pf);
+    });
+    display_all_tables()
+</script>
 
 {% endblock %}
