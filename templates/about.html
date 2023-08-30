@@ -4,6 +4,8 @@
 
 <div id="flagranch">
 
+    <p style="font-size: large; color: red; font-weight:bold;">THIS IS OPTION ONE</p>
+
     <p>$150 per person. Proceeds benefit the ranch. You can purchase tickets via the link below. Please do so by September 20.</p>
 
     <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
@@ -31,13 +33,33 @@
                 </option>
             </select></p>
         <input type="hidden" name="currency_code" value="USD" />
-        <input type="image" src="http://exultoshores.com/labels/static/pbutton.png" border="0" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Buy Now" />
+        <input type="image" src="http://exultoshores.com/labels/static/pbutton.png" border="0" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Buy Now"/>
     </form>
 
     <p>If you need more tickets, please repeat the purchase process.</p>
     <p style="font-size: smaller">Closer to the event, we will email you the tax-deductible sum for each ticket, our address in NE Paso Robles, parking and other details. We would prefer not to give refunds, but email us if you have unexpected circumstances arise.</p>
 </div>
 
+<div>
+    <p style="font-size: large; color: red; font-weight:bold;">THIS IS OPTION TWO</p>
+    <p>
+    <div id="donate-button-container">
+        <div id="donate-button"></div>
+        <script src="https://www.paypalobjects.com/donate/sdk/donate-sdk.js" charset="UTF-8"></script>
+        <script>
+        PayPal.Donation.Button({
+        env:'production',
+        hosted_button_id:'S49L7DSG2K3U6',
+        image: {
+        src: "http://exultoshores.com/labels/static/pbutton.png",
+        alt:'Donate with PayPal button',
+        title:'PayPal - The safer, easier way to pay online!',
+        }
+        }).render('#donate-button');
+        </script>
+        </div>
+    </p>
+</div>
 
 <header id=mainHeader>
 	<h1 style="padding-top:300px;">IGNORE THIS BELOW</h1>
