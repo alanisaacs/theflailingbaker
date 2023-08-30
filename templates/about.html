@@ -2,25 +2,21 @@
 
 {% block content %}
 
-<header id=mainHeader>
-	<h1>About The Flailing Baker</h1>
-</header>
+<div id="flagranch">
 
-<h3>BUTTON TEST</h3>
-<p>
+    <p>$150 per person. Proceeds benefit the ranch. You can purchase tickets via the link below. Please do so by September 20.</p>
+
     <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
         <input type="hidden" name="cmd" value="_s-xclick" />
         <input type="hidden" name="hosted_button_id" value="5D4WYAN7J9GEW" />
-        <table>
-          <tr>
-            <td>
-              <input type="hidden" name="on0" value="How many tickets would you like to purchase?"/>
-              How many tickets would you like to purchase?
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <select name="os0">
+        <input type="hidden" name="on0" value="How many tickets would you like to purchase?"/>
+            <p>How many tickets would you like to purchase?</p>
+            <p><select name="os0" style=
+                    "border-radius: 5px; 
+                    border-color:#a04240; 
+                    color: #a04240; 
+                    padding: 10px; 
+                    font-size: larger">
                 <option value="One">
                   One $150.00 USD
                 </option>
@@ -33,22 +29,29 @@
                 <option value="Four">
                   Four $600.00 USD
                 </option>
-              </select>
-            </td>
-          </tr>
-        </table>
+            </select></p>
         <input type="hidden" name="currency_code" value="USD" />
         <input type="image" src="http://exultoshores.com/labels/static/pbutton.png" border="0" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Buy Now" />
-      </form>
-</p>
-<p>If you need more tickets, please repeat the purchase process.</p>
+    </form>
 
+    <p>If you need more tickets, please repeat the purchase process.</p>
+    <p style="font-size: smaller">Closer to the event, we will email you the tax-deductible sum for each ticket, our address in NE Paso Robles, parking and other details. We would prefer not to give refunds, but email us if you have unexpected circumstances arise.</p>
+</div>
+
+
+<header id=mainHeader>
+	<h1 style="padding-top:300px;">IGNORE THIS BELOW</h1>
+</header>
+
+<header id=mainHeader>
+	<h1>About The Flailing Baker</h1>
+</header>
 
 <article>
     <p>
     </p>
     <HR>
-        <HR>
+    <HR>
 
     <p>The Flailing Baker is the personal baking website of Alan Isaacs.
     </p>
