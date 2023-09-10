@@ -2,87 +2,11 @@
 
 {% block content %}
 
-<div id="flagranch">
-
-    <p style="font-size: large; color: red; font-weight:bold;">OPTION ONE: PAYPAL PURCHASE BUTTON</p>
-
-    <p>$150 per person. Proceeds benefit the ranch. You can purchase tickets via the link below. Please do so by September 20.</p>
-
-    <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
-        <input type="hidden" name="cmd" value="_s-xclick" />
-        <input type="hidden" name="hosted_button_id" value="5D4WYAN7J9GEW" />
-        <input type="hidden" name="on0" value="How many tickets would you like to purchase?"/>
-            <p>How many tickets would you like to purchase?</p>
-            <p><select name="os0" style=
-                    "border-radius: 5px; 
-                    border-color:#a04240; 
-                    color: #a04240; 
-                    padding: 10px; 
-                    font-size: larger">
-                <option value="One">
-                  One $150.00 USD
-                </option>
-                <option value="Two">
-                  Two $300.00 USD
-                </option>
-                <option value="Three">
-                  Three $450.00 USD
-                </option>
-                <option value="Four">
-                  Four $600.00 USD
-                </option>
-            </select></p>
-        <input type="hidden" name="currency_code" value="USD" />
-        <input type="image" src="http://exultoshores.com/labels/static/pbutton.png" border="0" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Buy Now"/>
-    </form>
-
-    <p>If you need more tickets, please repeat the purchase process.</p>
-    <p style="font-size: smaller">Closer to the event, we will email you the tax-deductible sum for each ticket, our address in NE Paso Robles, parking and other details. We would prefer not to give refunds, but email us if you have unexpected circumstances arise.</p>
-</div>
-
-<div>
-    <p style="font-size: large; color: red; font-weight:bold;">OPTION TWO: PAYPAL DONATION BUTTON</p>
-    <p>
-    <div id="donate-button-container">
-        <div id="donate-button"></div>
-        <script src="https://www.paypalobjects.com/donate/sdk/donate-sdk.js" charset="UTF-8"></script>
-        <script>
-        PayPal.Donation.Button({
-        env:'production',
-        hosted_button_id:'S49L7DSG2K3U6',
-        image: {
-        src: "http://exultoshores.com/labels/static/pbutton.png",
-        alt:'Donate with PayPal button',
-        title:'PayPal - The safer, easier way to pay online!',
-        }
-        }).render('#donate-button');
-        </script>
-        </div>
-    </p>
-</div>
-
-<div>
-    <p style="font-size: large; color: red; font-weight:bold;">OPTION THREE: YAPSODY BUTTON</p>
-    <div> 
-        <a href="https://flagranch.yapsody.com/event/index/782331?ref=ebtn" target="_blank">
-            <img src="http://exultoshores.com/labels/static/pbutton.png" alt="Purchase Tickets">
-        </a>
-    </div>
-</div>
-
-<header id=mainHeader>
-	<h1 style="padding-top:300px;">IGNORE THIS BELOW</h1>
-</header>
-
 <header id=mainHeader>
 	<h1>About The Flailing Baker</h1>
 </header>
 
 <article>
-    <p>
-    </p>
-    <HR>
-    <HR>
 
     <p>The Flailing Baker is the personal baking website of Alan Isaacs.
     </p>

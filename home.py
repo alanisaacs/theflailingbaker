@@ -18,3 +18,9 @@ def showSiteIndex():
 def showAbout():
     """Display about page"""
     return render_template('about.html')
+
+# Display flag page
+@home_bp.route('/flag')
+def showFlag():
+    """Display flag page"""
+    return render_template('flag.html')
